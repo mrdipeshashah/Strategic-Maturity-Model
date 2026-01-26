@@ -3,56 +3,42 @@ import random
 from datetime import timedelta
 from google.colab import files
 
-# --- 1. DATA GENERATION ---
+# --- DATA GENERATION ---
 product_map = {25: 15, 50: 20, 60: 25, 75: 35, 100: 40, 150: 75}
 products = list(product_map.keys())
 all_rows = []
 
-# Cohort logic for 2023-2025
-cohort_years = [2023, 2024, 2025]
-
-for year in cohort_years:
+# Logic for 2023-2025 to allow for a full 2-year LTV window
+for year in [2023, 2024, 2025]:
     for i in range(1, 1001):
         cust_id = f"CUST-{year}-{i:04d}"
-        
-        # Start date within their joining year
         current_date = pd.Timestamp(year=year, month=random.randint(1,12), day=random.randint(1,28))
         
-        # High frequency logic: some buy once, others up to 12 times over the years
-        total_potential_orders = random.choice([1, 1, 2, 5, 8, 12]) 
+        # Frequency variation: creates the "Whales" vs "One-timers"
+        num_purchases = random.choice([1, 1, 2, 4, 7, 10]) 
         
-        for p in range(total_potential_orders):
+        for p in range(num_purchases):
             if current_date.year > 2025: break
-            
             all_rows.append({
                 'customer_id': cust_id,
                 'order_date': current_date,
                 'revenue': random.choice(products)
             })
-            
-            # Purchase frequency: clumped early, spread out later
-            gap = random.randint(10, 45) if p < 3 else random.randint(60, 180)
+            # Clumped early behavior, then spread out
+            gap = random.randint(15, 60) if p < 2 else random.randint(60, 180)
             current_date += timedelta(days=gap)
 
-# --- 2. LOG PROCESSING & CLEANUP ---
+# --- CLEANING & COLUMNS ---
 df_tx = pd.DataFrame(all_rows)
 df_tx['profit'] = df_tx['revenue'].map(product_map)
-
-# Sorting for chronological order
 df_tx = df_tx.sort_values(['customer_id', 'order_date'])
 
-# Selecting ONLY the requested columns
+# Format as requested
 df_tx_output = df_tx.copy()
 df_tx_output['order_date'] = df_tx_output['order_date'].dt.strftime('%d/%m/%Y')
 df_tx_output = df_tx_output[['customer_id', 'order_date', 'revenue', 'profit']]
 
-# --- 3. EXCEL EXPORT ---
-file_name = 'Transaction_Log_Clean.xlsx'
-with pd.ExcelWriter(file_name) as writer:
-    df_tx_output.to_excel(writer, sheet_name='1_Transaction_Log', index=False)
-
+# --- DOWNLOAD ---
+file_name = 'Raw_Transaction_Log.xlsx'
+df_tx_output.to_excel(file_name, index=False)
 files.download(file_name)
-
-# Verification
-print("Transaction Log generated with specified columns:")
-print(df_tx_output.head())
