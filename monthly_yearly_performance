@@ -1,0 +1,10 @@
+SELECT 
+  FORMAT_DATE('%Y-%m', order_date) AS month_year,
+  EXTRACT(YEAR FROM order_date) AS calendar_year,
+  COUNT(DISTINCT customer_id) AS monthly_active_customers,
+  SUM(revenue) AS total_revenue,
+  SUM(profit) AS total_profit,
+  ROUND(SUM(revenue) / COUNT(*), 2) AS avg_order_value
+FROM `enter.tablename_123456.events_*`
+GROUP BY 1, 2
+ORDER BY 1 ASC;
