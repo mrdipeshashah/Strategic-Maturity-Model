@@ -1,0 +1,10 @@
+SELECT 
+  EXTRACT(YEAR FROM min_date) as joining_year,
+  count(*) as customer_count
+FROM (
+  SELECT customer_id, min(order_date) as min_date
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+)
+GROUP BY 1
+ORDER BY 1
