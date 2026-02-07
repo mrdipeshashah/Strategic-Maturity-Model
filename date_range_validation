@@ -1,0 +1,5 @@
+SELECT 
+  min(order_date) as earliest_date,
+  max(order_date) as latest_date,
+  countif(order_date < '2023-01-01') as pre_2023_records //change-date-range-order-date
+FROM `enter.tablename_123456.events_*`
