@@ -1,0 +1,5 @@
+SELECT 
+  customer_id, order_date, revenue, count(*) as dupe_count
+FROM `enter.tablename_123456.events_*`
+GROUP BY 1, 2, 3
+HAVING dupe_count > 1
