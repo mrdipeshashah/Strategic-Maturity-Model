@@ -1,0 +1,6 @@
+SELECT 
+  count(*) as total_rows,
+  countif(customer_id IS NULL) as null_customers,
+  countif(order_date IS NULL) as null_dates,
+  countif(revenue IS NULL) as null_revenue
+FROM  `enter.tablename_123456.events_*`
