@@ -1,0 +1,8 @@
+SELECT 
+  EXTRACT(YEAR FROM order_date) AS calendar_year,
+  COUNT(DISTINCT customer_id) AS annual_active_customers,
+  SUM(revenue) AS annual_revenue,
+  SUM(profit) AS annual_profit
+FROM `enter.tablename_123456.events_*`
+GROUP BY 1
+ORDER BY 1;
