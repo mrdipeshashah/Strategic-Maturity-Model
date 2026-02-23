@@ -1,8 +1,0 @@
-SELECT 
-  Genre, 
-  COUNT(*) as total_count_bygenre,
-  ROUND(AVG(Rating), 2) as avg_rating
-FROM `mrdipeshashah.mydvdcollection.dvdcollection` 
-WHERE Genre IS NOT NULL
-GROUP BY Genre
-ORDER BY avg_rating DESC;
