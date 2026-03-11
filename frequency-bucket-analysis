@@ -1,0 +1,29 @@
+SELECT 
+  EXTRACT(YEAR FROM first_purchase_date) AS cohort_year,
+  CASE 
+    WHEN no_of_purchases = 1 THEN '1. Single Purchase'
+    WHEN no_of_purchases BETWEEN 2 AND 4 THEN '2. Repeat Buyer (2-4)'
+    WHEN no_of_purchases >= 5 THEN '3. Frequent Flyer (5+)'
+  END AS frequency_tier,
+  COUNT(customer_id) AS customer_count,
+  
+  -- Financial Context
+  ROUND(SUM(total_revenue), 0) AS bucket_revenue,
+  ROUND(SUM(total_profit), 0) AS bucket_profit,
+  
+  -- Efficiency Metrics
+  ROUND(SUM(total_revenue) / SUM(no_of_purchases), 2) AS aov_per_bucket,
+  ROUND(SUM(total_profit) / SUM(no_of_purchases), 2) AS avg_profit_per_order,
+  ROUND(SUM(total_profit) / COUNT(customer_id), 2) AS avg_lifetime_profit_per_cust
+FROM (
+  SELECT 
+    customer_id, 
+    MIN(order_date) as first_purchase_date,
+    COUNT(*) as no_of_purchases,
+    SUM(revenue) as total_revenue,
+    SUM(profit) as total_profit
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+)
+GROUP BY 1, 2
+ORDER BY 1, 2;
