@@ -1,0 +1,30 @@
+SELECT 
+  EXTRACT(YEAR FROM first_purchase_date) AS cohort_year,
+  CASE 
+    WHEN total_profit >= 400 THEN '1. Super Whale ($400+)'
+    WHEN total_profit >= 250 THEN '2. Whale ($250-$399)'
+    WHEN total_profit >= 150 THEN '3. Profitable ($150-$249)'
+    ELSE '4. Low Value (<$150)'
+  END AS profit_bucket,
+  COUNT(customer_id) AS customer_count,
+  
+  -- Financial Context
+  ROUND(SUM(total_revenue), 0) AS bucket_revenue,
+  ROUND(SUM(total_profit), 0) AS bucket_profit,
+  
+  -- Performance Metrics
+  ROUND(SUM(total_revenue) / SUM(no_of_purchases), 2) AS aov_per_bucket,
+  ROUND(SUM(total_profit) / SUM(no_of_purchases), 2) AS avg_profit_per_order,
+  ROUND(AVG(total_profit), 2) AS avg_lifetime_profit_per_cust
+FROM (
+  SELECT 
+    customer_id, 
+    MIN(order_date) as first_purchase_date,
+    COUNT(*) as no_of_purchases,
+    SUM(revenue) as total_revenue,
+    SUM(profit) as total_profit
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+)
+GROUP BY 1, 2
+ORDER BY 1, 2;
