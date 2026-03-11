@@ -1,0 +1,57 @@
+WITH customer_acquisition AS (
+  -- Step 1: Establish the baseline "Day 0" and Cohorts
+  SELECT 
+    customer_id, 
+    MIN(order_date) AS first_purchase_date,
+    MAX(order_date) AS last_purchase_date,
+    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
+    FORMAT_DATE('%Y-%m', MIN(order_date)) AS cohort_month
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+),
+running_profit AS (
+  -- Step 2: Calculate cumulative profit to find the "Payback Day"
+  SELECT 
+    t.customer_id,
+    t.order_date,
+    t.profit,
+    SUM(t.profit) OVER (PARTITION BY t.customer_id ORDER BY t.order_date) as cumulative_profit,
+    a.first_purchase_date
+  FROM  `enter.tablename_123456.events_*`
+  JOIN customer_acquisition a ON t.customer_id = a.customer_id
+),
+payback_calc AS (
+  -- Step 3: Identify the first date they hit $150
+  SELECT 
+    customer_id,
+    MIN(order_date) as date_hit_150
+  FROM running_profit
+  WHERE cumulative_profit >= 150
+  GROUP BY 1
+)
+
+SELECT 
+  a.customer_id,
+  a.cohort_year,
+  a.cohort_month,
+  COUNT(t.customer_id) AS no_of_purchases,
+  SUM(t.revenue) AS total_revenue,
+  SUM(t.profit) AS total_profit,
+  a.first_purchase_date,
+  a.last_purchase_date,
+  DATE_DIFF(a.last_purchase_date, a.first_purchase_date, DAY) AS active_days,
+  -- Days to payback $150
+  DATE_DIFF(p.date_hit_150, a.first_purchase_date, DAY) AS days_to_payback_150,
+  -- Time-based LTV Windows
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 0, t.profit, 0)) AS ltv_1_day,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 30, t.profit, 0)) AS ltv_30_days,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 60, t.profit, 0)) AS ltv_60_days,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 90, t.profit, 0)) AS ltv_90_days,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 180, t.profit, 0)) AS ltv_180_days,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 365, t.profit, 0)) AS ltv_1_yr,
+  SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 730, t.profit, 0)) AS ltv_2_yrs
+FROM  `enter.tablename_123456.events_*`
+JOIN customer_acquisition a ON t.customer_id = a.customer_id
+LEFT JOIN payback_calc p ON t.customer_id = p.customer_id
+GROUP BY 1, 2, 3, 7, 8, 10
+ORDER BY a.first_purchase_date ASC;
