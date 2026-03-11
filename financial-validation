@@ -1,0 +1,8 @@
+SELECT 
+  revenue, 
+  profit, 
+  COUNT(*) as frequency,
+  ROUND(profit / revenue, 2) as margin_pct
+FROM `enter.tablename_123456.events_*`
+GROUP BY 1, 2
+ORDER BY revenue DESC
