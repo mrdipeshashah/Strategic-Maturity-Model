@@ -6,7 +6,7 @@ WITH customer_acquisition AS (
     MAX(order_date) AS last_purchase_date,
     EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
     FORMAT_DATE('%Y-%m', MIN(order_date)) AS cohort_month
-  FROM `enter.tablename_123456.events_*`
+  FROM `enter.tablename_123456.events_*` t
   GROUP BY 1
 ),
 running_profit AS (
@@ -17,7 +17,7 @@ running_profit AS (
     t.profit,
     SUM(t.profit) OVER (PARTITION BY t.customer_id ORDER BY t.order_date) as cumulative_profit,
     a.first_purchase_date
-  FROM  `enter.tablename_123456.events_*`
+  FROM `enter.tablename_123456.events_*` t
   JOIN customer_acquisition a ON t.customer_id = a.customer_id
 ),
 payback_calc AS (
@@ -50,7 +50,7 @@ SELECT
   SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 180, t.profit, 0)) AS ltv_180_days,
   SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 365, t.profit, 0)) AS ltv_1_yr,
   SUM(IF(DATE_DIFF(t.order_date, a.first_purchase_date, DAY) <= 730, t.profit, 0)) AS ltv_2_yrs
-FROM  `enter.tablename_123456.events_*`
+FROM `enter.tablename_123456.events_*` t
 JOIN customer_acquisition a ON t.customer_id = a.customer_id
 LEFT JOIN payback_calc p ON t.customer_id = p.customer_id
 GROUP BY 1, 2, 3, 7, 8, 10
