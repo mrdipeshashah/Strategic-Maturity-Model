@@ -1,0 +1,35 @@
+WITH customer_base AS (
+  SELECT 
+    customer_id, 
+    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
+    MIN(order_date) AS first_purchase_date
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+),
+daily_profit_accumulation AS (
+  SELECT 
+    t.customer_id,
+    b.cohort_year,
+    DATE_DIFF(t.order_date, b.first_purchase_date, DAY) AS days_since_join,
+    SUM(t.profit) OVER(PARTITION BY t.customer_id ORDER BY t.order_date) AS cumulative_profit
+  FROM `enter.tablename_123456.events_*` t
+  JOIN customer_base b ON t.customer_id = b.customer_id
+),
+payback_milestones AS (
+  SELECT 
+    customer_id,
+    cohort_year,
+    -- Change the 80 to whatever your actual CAC is
+    MIN(IF(cumulative_profit >= 80, days_since_join, NULL)) AS days_to_payback_80
+  FROM daily_profit_accumulation
+  GROUP BY 1, 2
+)
+
+SELECT 
+  cohort_year,
+  COUNT(customer_id) AS total_customers,
+  COUNT(days_to_payback_80) AS customers_who_paid_back_80days,
+  ROUND(AVG(days_to_payback_80), 0) AS avg_days_to_payback_80days
+FROM payback_milestones
+GROUP BY 1
+ORDER BY 1;
