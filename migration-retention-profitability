@@ -1,0 +1,43 @@
+WITH customer_cohorts AS (
+  SELECT 
+    customer_id, 
+    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+),
+yearly_activity AS (
+  SELECT 
+    customer_id, 
+    EXTRACT(YEAR FROM order_date) AS activity_year,
+    SUM(revenue) AS yearly_rev,
+    SUM(profit) AS yearly_prof
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1, 2
+)
+
+SELECT 
+  c.cohort_year,
+  COUNT(DISTINCT c.customer_id) AS original_cohort_size,
+  
+  -- 2023 PERFORMANCE
+  COUNT(DISTINCT IF(a.activity_year = 2023, a.customer_id, NULL)) AS active_2023,
+  ROUND(COUNT(DISTINCT IF(a.activity_year = 2023, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2023,
+  ROUND(SUM(IF(a.activity_year = 2023, a.yearly_rev, 0)), 0) AS rev_2023,
+  ROUND(SUM(IF(a.activity_year = 2023, a.yearly_prof, 0)), 0) AS prof_2023,
+
+  -- 2024 PERFORMANCE
+  COUNT(DISTINCT IF(a.activity_year = 2024, a.customer_id, NULL)) AS active_2024,
+  ROUND(COUNT(DISTINCT IF(a.activity_year = 2024, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2024,
+  ROUND(SUM(IF(a.activity_year = 2024, a.yearly_rev, 0)), 0) AS rev_2024,
+  ROUND(SUM(IF(a.activity_year = 2024, a.yearly_prof, 0)), 0) AS prof_2024,
+
+  -- 2025 PERFORMANCE
+  COUNT(DISTINCT IF(a.activity_year = 2025, a.customer_id, NULL)) AS active_2025,
+  ROUND(COUNT(DISTINCT IF(a.activity_year = 2025, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2025,
+  ROUND(SUM(IF(a.activity_year = 2025, a.yearly_rev, 0)), 0) AS rev_2025,
+  ROUND(SUM(IF(a.activity_year = 2025, a.yearly_prof, 0)), 0) AS prof_2025
+
+FROM customer_cohorts c
+LEFT JOIN yearly_activity a ON c.customer_id = a.customer_id
+GROUP BY 1
+ORDER BY 1;
