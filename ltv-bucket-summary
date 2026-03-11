@@ -1,0 +1,54 @@
+WITH customer_base AS (
+  SELECT 
+    customer_id, 
+    MIN(order_date) AS first_purchase_date,
+    -- Today's date is Mar 11, 2026 based on the dataset's current context
+    DATE_DIFF(CURRENT_DATE(), MIN(order_date), DAY) AS account_age_days
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+),
+milestone_data AS (
+  SELECT 
+    t.customer_id,
+    b.account_age_days,
+    -- Profit Aggregates (Summed within the window)
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 90, t.profit, 0)) AS prof_90d,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 180, t.profit, 0)) AS prof_180d,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365, t.profit, 0)) AS prof_1yr,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 730, t.profit, 0)) AS prof_2yr,
+    -- Revenue Aggregates (Summed within the window)
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 90, t.revenue, 0)) AS rev_90d,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 180, t.revenue, 0)) AS rev_180d,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365, t.revenue, 0)) AS rev_1yr,
+    SUM(IF(DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 730, t.revenue, 0)) AS rev_2yr
+  FROM `enter.tablename_123456.events_*` t
+  JOIN customer_base b ON t.customer_id = b.customer_id
+  GROUP BY 1, 2
+)
+
+SELECT 
+  -- 90 DAYS (Matured)
+  COUNTIF(account_age_days >= 90) AS count_90d,
+  ROUND(SUM(IF(account_age_days >= 90, prof_90d, 0)), 0) AS total_prof_90d,
+  ROUND(AVG(IF(account_age_days >= 90, prof_90d, NULL)), 2) AS avg_ltv_90d,
+  APPROX_QUANTILES(IF(account_age_days >= 90, prof_90d, NULL), 2)[OFFSET(1)] AS median_ltv_90d,
+
+  -- 180 DAYS (Matured)
+  COUNTIF(account_age_days >= 180) AS count_180d,
+  ROUND(SUM(IF(account_age_days >= 180, prof_180d, 0)), 0) AS total_prof_180d,
+  ROUND(AVG(IF(account_age_days >= 180, prof_180d, NULL)), 2) AS avg_ltv_180d,
+  APPROX_QUANTILES(IF(account_age_days >= 180, prof_180d, NULL), 2)[OFFSET(1)] AS median_ltv_180d,
+
+  -- 1 YEAR (Matured)
+  COUNTIF(account_age_days >= 365) AS count_1yr,
+  ROUND(SUM(IF(account_age_days >= 365, prof_1yr, 0)), 0) AS total_prof_1yr,
+  ROUND(AVG(IF(account_age_days >= 365, prof_1yr, NULL)), 2) AS avg_ltv_1yr,
+  APPROX_QUANTILES(IF(account_age_days >= 365, prof_1yr, NULL), 2)[OFFSET(1)] AS median_ltv_1yr,
+
+  -- 2 YEAR (Matured)
+  COUNTIF(account_age_days >= 730) AS count_2yr,
+  ROUND(SUM(IF(account_age_days >= 730, prof_2yr, 0)), 0) AS total_prof_2yr,
+  ROUND(AVG(IF(account_age_days >= 730, prof_2yr, NULL)), 2) AS avg_ltv_2yr,
+  APPROX_QUANTILES(IF(account_age_days >= 730, prof_2yr, NULL), 2)[OFFSET(1)] AS median_ltv_2yr
+
+FROM milestone_data;
