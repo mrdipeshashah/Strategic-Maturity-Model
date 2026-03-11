@@ -1,0 +1,29 @@
+SELECT 
+  EXTRACT(YEAR FROM first_purchase_date) AS cohort_year,
+  EXTRACT(MONTH FROM first_purchase_date) AS cohort_month,
+  FORMAT_DATE('%b', first_purchase_date) AS month_name,
+  COUNT(customer_id) AS new_customers,
+  
+  -- Financial Context
+  ROUND(SUM(total_revenue), 0) AS total_revenue,
+  ROUND(SUM(total_profit), 0) AS total_profit,
+  
+  -- Performance Metrics
+  ROUND(SUM(total_revenue) / SUM(no_of_purchases), 2) AS aov,
+  ROUND(SUM(total_profit) / SUM(no_of_purchases), 2) AS profit_per_order,
+  ROUND(AVG(total_profit), 2) AS avg_lifetime_profit,
+  
+  -- Retention/Loyalty Context
+  ROUND(AVG(no_of_purchases), 2) AS avg_purchase_frequency
+FROM (
+  SELECT 
+    customer_id, 
+    MIN(order_date) as first_purchase_date,
+    COUNT(*) as no_of_purchases,
+    SUM(revenue) as total_revenue,
+    SUM(profit) as total_profit
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+)
+GROUP BY 1, 2, 3
+ORDER BY 2, 1; -- Sorted by Month then Year to make Jan 23 vs Jan 24 vs Jan 25 easy to see
