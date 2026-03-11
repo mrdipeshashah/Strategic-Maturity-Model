@@ -1,0 +1,7 @@
+SELECT 
+  customer_id, 
+  MIN(order_date) as first_purchase_date,
+  MAX(order_date) as latest_purchase_date,
+  COUNT(*) as lifetime_orders
+FROM `enter.tablename_123456.events_*`
+GROUP BY 1
