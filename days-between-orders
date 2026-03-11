@@ -1,0 +1,7 @@
+SELECT 
+  customer_id,
+  order_date,
+  -- Calculates days since the previous order for that specific customer
+  DATE_DIFF(order_date, LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date), DAY) as days_between_orders
+FROM `enter.tablename_123456.events_*`
+ORDER BY customer_id, order_date
