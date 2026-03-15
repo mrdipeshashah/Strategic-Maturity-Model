@@ -3,34 +3,51 @@ WITH customer_base AS (
     customer_id, 
     EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
     MIN(order_date) AS first_purchase_date,
-    DATE_DIFF(CURRENT_DATE(), MIN(order_date), DAY) AS account_age_days
+    DATE_DIFF(CURRENT_DATE(), MIN(order_date), DAY) AS individual_age_days
   FROM `enter.tablename_123456.events_*`
   GROUP BY 1
 ),
-cohort_1yr_performance AS (
+cohort_milestones AS (
   SELECT 
     b.cohort_year,
     b.customer_id,
-    b.account_age_days,
-    SUM(t.profit) AS prof_1yr
+    b.individual_age_days,
+    -- Velocity Milestones (The "Speed" Metrics)
+    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 30 THEN t.profit ELSE 0 END) AS prof_30d,
+    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 90 THEN t.profit ELSE 0 END) AS prof_90d,
+    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 180 THEN t.profit ELSE 0 END) AS prof_180d,
+    -- Full Year Target (The "Value" Metric)
+    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365 THEN t.profit ELSE 0 END) AS prof_365d
   FROM customer_base b
   LEFT JOIN `enter.tablename_123456.events_*` t 
     ON t.customer_id = b.customer_id
-    AND DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365
   GROUP BY 1, 2, 3
 )
 
 SELECT 
   cohort_year,
-  COUNT(customer_id) AS total_customers,
-  -- Status tells us if the data is "Finished" or "In Progress"
+  COUNT(customer_id) AS total_customers_in_cohort,
+  
+  -- 1. Velocity Columns (Early Efficiency)
+  ROUND(AVG(CASE WHEN individual_age_days >= 30 THEN prof_30d END), 2) AS avg_profit_30d,
+  ROUND(AVG(CASE WHEN individual_age_days >= 90 THEN prof_90d END), 2) AS avg_profit_90d,
+  ROUND(AVG(CASE WHEN individual_age_days >= 180 THEN prof_180d END), 2) AS avg_profit_180d,
+
+  -- 2. Matured LTV (The "Fair Fight" Benchmark)
+  -- Only includes customers who have reached their 1st birthday
+  ROUND(AVG(CASE WHEN individual_age_days >= 365 THEN prof_365d END), 2) AS avg_ltv_matured_365d,
+
+  -- 3. Blended LTV (The "Real-Time" Total)
+  -- Includes everyone, even if they joined yesterday
+  ROUND(AVG(prof_365d), 2) AS avg_ltv_blended_to_date,
+
+  -- 4. Status Column (For scannability)
   CASE 
-    WHEN MIN(account_age_days) >= 365 THEN 'Matured (Full Year Data)'
-    ELSE 'In-Progress (Partial Year)'
-  END AS cohort_status,
-  ROUND(AVG(prof_1yr), 2) AS avg_ltv_year_1,
-  APPROX_QUANTILES(prof_1yr, 2)[OFFSET(1)] AS median_ltv_year_1,
-  ROUND(SUM(prof_1yr), 0) AS total_profit_generated_yr1
-FROM cohort_1yr_performance
+    WHEN MIN(individual_age_days) >= 365 THEN 'Fully Matured'
+    WHEN MAX(individual_age_days) < 365 THEN 'Early Stage'
+    ELSE 'Maturing (Mixed)'
+  END AS cohort_status
+
+FROM cohort_milestones
 GROUP BY 1
 ORDER BY 1;
