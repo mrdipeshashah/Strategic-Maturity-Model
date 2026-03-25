@@ -14,9 +14,10 @@ cohort_milestones AS (
     b.individual_age_days,
     -- Velocity Milestones (The "Speed" Metrics)
     SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 30 THEN t.profit ELSE 0 END) AS prof_30d,
+    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 60 THEN t.profit ELSE 0 END) AS prof_60d, -- ADDED
     SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 90 THEN t.profit ELSE 0 END) AS prof_90d,
     SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 180 THEN t.profit ELSE 0 END) AS prof_180d,
-    -- Full Year Target (The "Value" Metric)
+    -- Full Year Target
     SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365 THEN t.profit ELSE 0 END) AS prof_365d
   FROM customer_base b
   LEFT JOIN `enter.tablename_123456.events_*` t 
@@ -30,18 +31,17 @@ SELECT
   
   -- 1. Velocity Columns (Early Efficiency)
   ROUND(AVG(CASE WHEN individual_age_days >= 30 THEN prof_30d END), 2) AS avg_profit_30d,
+  ROUND(AVG(CASE WHEN individual_age_days >= 60 THEN prof_60d END), 2) AS avg_profit_60d, -- ADDED
   ROUND(AVG(CASE WHEN individual_age_days >= 90 THEN prof_90d END), 2) AS avg_profit_90d,
   ROUND(AVG(CASE WHEN individual_age_days >= 180 THEN prof_180d END), 2) AS avg_profit_180d,
 
   -- 2. Matured LTV (The "Fair Fight" Benchmark)
-  -- Only includes customers who have reached their 1st birthday
   ROUND(AVG(CASE WHEN individual_age_days >= 365 THEN prof_365d END), 2) AS avg_ltv_matured_365d,
 
   -- 3. Blended LTV (The "Real-Time" Total)
-  -- Includes everyone, even if they joined yesterday
   ROUND(AVG(prof_365d), 2) AS avg_ltv_blended_to_date,
 
-  -- 4. Status Column (For scannability)
+  -- 4. Status Column
   CASE 
     WHEN MIN(individual_age_days) >= 365 THEN 'Fully Matured'
     WHEN MAX(individual_age_days) < 365 THEN 'Early Stage'
