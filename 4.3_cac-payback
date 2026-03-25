@@ -19,8 +19,10 @@ payback_milestones AS (
   SELECT 
     customer_id,
     cohort_year,
-    -- Change the 80 to whatever your actual CAC is
-    MIN(IF(cumulative_profit >= 80, days_since_join, NULL)) AS days_to_payback_80
+    -- Break-even Threshold (CAC)
+    MIN(IF(cumulative_profit >= 80, days_since_join, NULL)) AS days_to_payback_80,
+    -- Strategic Profit Target (Aligns with 3.2)
+    MIN(IF(cumulative_profit >= 150, days_since_join, NULL)) AS days_to_profit_150
   FROM daily_profit_accumulation
   GROUP BY 1, 2
 )
@@ -28,8 +30,12 @@ payback_milestones AS (
 SELECT 
   cohort_year,
   COUNT(customer_id) AS total_customers,
-  COUNT(days_to_payback_80) AS customers_who_paid_back_80days,
-  ROUND(AVG(days_to_payback_80), 0) AS avg_days_to_payback_80days
+  -- Break-even Metrics
+  COUNT(days_to_payback_80) AS customers_at_breakeven,
+  ROUND(AVG(days_to_payback_80), 0) AS avg_days_to_breakeven,
+  -- Profit Target Metrics
+  COUNT(days_to_profit_150) AS customers_at_profit_target,
+  ROUND(AVG(days_to_profit_150), 0) AS avg_days_to_profit_target
 FROM payback_milestones
 GROUP BY 1
 ORDER BY 1;
