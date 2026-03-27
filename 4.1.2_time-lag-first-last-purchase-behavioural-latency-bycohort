@@ -1,0 +1,38 @@
+WITH customer_base AS (
+  SELECT 
+    customer_id, 
+    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
+    MIN(order_date) AS first_purchase_date,
+    MAX(order_date) AS last_purchase_date,
+    COUNT(*) AS total_purchases, 
+    SUM(revenue) AS total_lifetime_revenue,
+    SUM(profit) AS total_lifetime_profit
+  FROM `enter.tablename_123456.events_*`
+  GROUP BY 1
+),
+latency_calc AS (
+  SELECT 
+    *,
+    DATE_DIFF(last_purchase_date, first_purchase_date, DAY) AS days_to_last_purchase
+  FROM customer_base
+  WHERE total_purchases > 1 
+)
+
+SELECT 
+  cohort_year,
+  CASE 
+    WHEN days_to_last_purchase <= 30 THEN '0-30 Days (Hyper-Active)'
+    WHEN days_to_last_purchase <= 90 THEN '31-90 Days (Consistent)'
+    WHEN days_to_last_purchase <= 180 THEN '91-180 Days (Seasonal)'
+    WHEN days_to_last_purchase <= 365 THEN '181-365 Days (Annual)'
+    ELSE '365+ Days (Resurrected/Late Money)'
+  END AS retention_window,
+  COUNT(customer_id) AS customer_count,
+  ROUND(SUM(total_lifetime_revenue), 0) AS total_revenue,
+  ROUND(SUM(total_lifetime_profit), 0) AS total_profit,
+  ROUND(AVG(total_lifetime_profit), 2) AS avg_ltv,
+  -- % of customers WITHIN that specific cohort year
+  ROUND(100 * COUNT(customer_id) / SUM(COUNT(customer_id)) OVER(PARTITION BY cohort_year), 1) AS pct_of_cohort_repeaters
+FROM latency_calc
+GROUP BY 1, 2
+ORDER BY cohort_year DESC, MIN(days_to_last_purchase) ASC;
