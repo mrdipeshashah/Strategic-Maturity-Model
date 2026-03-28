@@ -1,0 +1,42 @@
+WITH order_sequencing AS (
+  SELECT 
+    customer_id,
+    order_date,
+    revenue,
+    profit,
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number,
+    COUNT(*) OVER(PARTITION BY customer_id) as total_lifetime_orders
+  FROM `enter.tablename_123456.events_*`
+),
+first_order AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 1
+),
+second_order AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 2
+)
+
+SELECT 
+  EXTRACT(YEAR FROM f.order_date) AS cohort_year,
+  COUNT(f.customer_id) AS new_customers,
+  
+  -- 1. THE ONE-AND-DONE (GHOST) METRICS
+  COUNTIF(f.total_lifetime_orders = 1) AS one_and_done_count,
+  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), 0) AS ghost_revenue,
+  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_profit,
+  ROUND(SAFE_DIVIDE(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), COUNTIF(f.total_lifetime_orders = 1)), 2) AS ghost_aov,
+
+  -- 2. THE SECOND PURCHASE (BRIDGE) METRICS
+  COUNT(s.customer_id) AS second_purchase_count,
+  ROUND(SUM(s.revenue), 0) AS bridge_revenue,
+  ROUND(SUM(s.profit), 0) AS bridge_profit,
+  ROUND(SAFE_DIVIDE(SUM(s.revenue), COUNT(s.customer_id)), 2) AS bridge_aov,
+  
+  -- 3. COMPARISON & RATIOS
+  ROUND(100 * COUNT(s.customer_id) / COUNT(f.customer_id), 1) AS bridge_conv_rate,
+  -- % of Total Cohort Profit coming ONLY from the first purchase of people who never returned
+  ROUND(100 * SAFE_DIVIDE(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), SUM(f.profit)), 1) AS pct_profit_from_dead_leads
+
+FROM first_order f
+LEFT JOIN second_order s ON f.customer_id = s.customer_id
+GROUP BY 1
+ORDER BY 1 DESC;
