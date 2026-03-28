@@ -4,7 +4,9 @@ WITH order_sequencing AS (
     order_date,
     revenue,
     profit,
+    -- Tracks the sequence (1st, 2nd, 3rd...)
     ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number,
+    -- Tracks the total career orders for that customer
     COUNT(*) OVER(PARTITION BY customer_id) as total_lifetime_orders
   FROM `enter.tablename_123456.events_*`
 ),
@@ -13,30 +15,46 @@ first_order AS (
 ),
 second_order AS (
   SELECT * FROM order_sequencing WHERE purchase_number = 2
+),
+third_plus_orders AS (
+  -- Aggregate all money from the 3rd purchase onwards
+  SELECT 
+    customer_id,
+    SUM(revenue) as extra_revenue,
+    SUM(profit) as extra_profit
+  FROM order_sequencing 
+  WHERE purchase_number >= 3
+  GROUP BY 1
 )
 
 SELECT 
   EXTRACT(YEAR FROM f.order_date) AS cohort_year,
   COUNT(f.customer_id) AS new_customers,
   
-  -- 1. THE ONE-AND-DONE (GHOST) METRICS
-  COUNTIF(f.total_lifetime_orders = 1) AS one_and_done_count,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), 0) AS ghost_revenue,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_profit,
-  ROUND(SAFE_DIVIDE(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), COUNTIF(f.total_lifetime_orders = 1)), 2) AS ghost_aov,
+  -- 1. THE GHOSTS (Exactly 1 Purchase Total)
+  COUNTIF(f.total_lifetime_orders = 1) AS ghost_count,
+  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), 0) AS ghost_total_rev,
+  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_total_profit,
 
-  -- 2. THE SECOND PURCHASE (BRIDGE) METRICS
-  COUNT(s.customer_id) AS second_purchase_count,
-  ROUND(SUM(s.revenue), 0) AS bridge_revenue,
-  ROUND(SUM(s.profit), 0) AS bridge_profit,
-  ROUND(SAFE_DIVIDE(SUM(s.revenue), COUNT(s.customer_id)), 2) AS bridge_aov,
+  -- 2. THE BRIDGE (Exactly 2 Purchases Total)
+  COUNTIF(f.total_lifetime_orders = 2) AS bridge_count,
+  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.revenue + s.revenue, 0)), 0) AS bridge_total_rev,
+  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.profit + s.profit, 0)), 0) AS bridge_total_profit,
   
-  -- 3. COMPARISON & RATIOS
-  ROUND(100 * COUNT(s.customer_id) / COUNT(f.customer_id), 1) AS bridge_conv_rate,
-  -- % of Total Cohort Profit coming ONLY from the first purchase of people who never returned
-  ROUND(100 * SAFE_DIVIDE(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), SUM(f.profit)), 1) AS pct_profit_from_dead_leads
+  -- 3. THE POWER USERS (3 or More Purchases Total)
+  COUNTIF(f.total_lifetime_orders >= 3) AS power_user_count,
+  -- Sum of 1st + 2nd + (3rd, 4th, 5th...)
+  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.revenue + s.revenue + t.extra_revenue, 0)), 0) AS power_user_total_rev,
+  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.profit + s.profit + t.extra_profit, 0)), 0) AS power_user_total_profit,
+  
+  -- 4. KPI & TIMING
+  -- Average days from 1st to 2nd purchase for anyone who made it that far
+  ROUND(AVG(DATE_DIFF(s.order_date, f.order_date, DAY)), 0) AS avg_days_to_2nd_purchase,
+  -- Math Check: This should equal 0 if the logic is watertight
+  COUNT(f.customer_id) - (COUNTIF(f.total_lifetime_orders = 1) + COUNTIF(f.total_lifetime_orders = 2) + COUNTIF(f.total_lifetime_orders >= 3)) AS math_check
 
 FROM first_order f
 LEFT JOIN second_order s ON f.customer_id = s.customer_id
+LEFT JOIN third_plus_orders t ON f.customer_id = t.customer_id
 GROUP BY 1
 ORDER BY 1 DESC;
