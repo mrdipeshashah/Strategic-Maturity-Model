@@ -1,0 +1,41 @@
+WITH order_sequencing AS (
+  SELECT 
+    customer_id,
+    order_date,
+    revenue,
+    profit,
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number,
+    COUNT(*) OVER(PARTITION BY customer_id) as total_lifetime_orders
+  FROM `enter.tablename_123456.events_*`
+),
+first_order AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 1
+),
+second_order AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 2
+)
+
+SELECT 
+  -- Zooming into the Month
+  FORMAT_DATE('%Y-%m', f.order_date) AS cohort_month,
+  COUNT(f.customer_id) AS new_customers,
+  
+  -- ONE-AND-DONE METRICS
+  COUNTIF(f.total_lifetime_orders = 1) AS one_and_done_count,
+  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_profit,
+
+  -- SECOND PURCHASE METRICS
+  COUNT(s.customer_id) AS second_purchase_count,
+  ROUND(SUM(s.profit), 0) AS bridge_profit,
+  ROUND(SAFE_DIVIDE(SUM(s.revenue), COUNT(s.customer_id)), 2) AS bridge_aov,
+  
+  -- THE KPI
+  ROUND(100 * COUNT(s.customer_id) / COUNT(f.customer_id), 1) AS bridge_conv_rate,
+  ROUND(AVG(DATE_DIFF(s.order_date, f.order_date, DAY)), 0) AS avg_days_to_2nd_purchase
+
+FROM first_order f
+LEFT JOIN second_order s ON f.customer_id = s.customer_id
+-- Optional: Filter to stay focused on recent history
+WHERE f.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 18 MONTH)
+GROUP BY 1
+ORDER BY 1 DESC;
