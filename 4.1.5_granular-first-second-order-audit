@@ -1,0 +1,41 @@
+WITH order_sequencing AS (
+  SELECT 
+    customer_id,
+    order_date,
+    revenue,
+    profit,
+    -- Tracks the sequence 1, 2, 3... per customer
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number
+  FROM `enter.tablename_123456.events_*`
+),
+first_orders AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 1
+),
+second_orders AS (
+  SELECT * FROM order_sequencing WHERE purchase_number = 2
+)
+
+SELECT 
+  -- 1. FIRST PURCHASE DIMENSIONS (The Acquisition)
+  f.order_date AS first_purchase_date,
+  FORMAT_DATE('%b-%y', f.order_date) AS first_purchase_month,
+  FORMAT_DATE('%d/%m/%Y', DATE_TRUNC(f.order_date, WEEK(MONDAY))) AS week_commencing_first_purchase,
+  f.customer_id,
+  f.revenue AS first_rev,
+  f.profit AS first_profit,
+  
+  -- 2. SECOND PURCHASE DIMENSIONS (The Bridge)
+  s.order_date AS second_purchase_date,
+  -- This column helps you see when the "Return Cash" actually hit the bank
+  FORMAT_DATE('%d/%m/%Y', DATE_TRUNC(s.order_date, WEEK(MONDAY))) AS week_commencing_second_purchase,
+  s.revenue AS second_rev,
+  s.profit AS second_profit,
+  
+  -- 3. UNIT ECONOMICS & PERFORMANCE
+  DATE_DIFF(s.order_date, f.order_date, DAY) AS days_to_bridge,
+  (f.revenue + COALESCE(s.revenue, 0)) AS cumulative_rev,
+  (f.profit + COALESCE(s.profit, 0)) AS cumulative_profit
+
+FROM first_orders f
+LEFT JOIN second_orders s ON f.customer_id = s.customer_id
+ORDER BY f.order_date DESC;
