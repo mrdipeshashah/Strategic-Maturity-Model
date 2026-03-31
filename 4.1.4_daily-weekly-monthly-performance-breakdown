@@ -1,0 +1,48 @@
+WITH order_classification AS (
+  SELECT 
+    order_date,
+    revenue,
+    profit,
+    customer_id,
+    -- Labeling the customer at the time of the transaction
+    CASE 
+      WHEN ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) = 1 
+      THEN 'New' 
+      ELSE 'Returning' 
+    END AS customer_type
+  FROM `enter.tablename_123456.events_*`
+),
+daily_aggregation AS (
+  SELECT
+    order_date,
+    -- 1. Numeric Sort Columns (Keep these hidden in charts, use for sorting)
+    EXTRACT(YEAR FROM order_date) AS year_no,
+    EXTRACT(MONTH FROM order_date) AS month_no,
+    EXTRACT(WEEK(MONDAY) FROM order_date) AS week_no,
+    
+    -- 2. Human Readable Format Columns
+    FORMAT_DATE('%b-%y', order_date) AS month_name, -- e.g., Jan-25
+    -- This finds the Monday of that week
+    FORMAT_DATE('%d/%m/%Y', DATE_TRUNC(order_date, WEEK(MONDAY))) AS week_commencing,
+    
+    -- 3. The Metrics
+    COUNT(DISTINCT customer_id) AS total_customers,
+    SUM(revenue) AS total_revenue,
+    SUM(profit) AS total_profit,
+    
+    -- New Customer Breakdown
+    COUNT(DISTINCT IF(customer_type = 'New', customer_id, NULL)) AS new_customers,
+    SUM(IF(customer_type = 'New', revenue, 0)) AS new_rev,
+    SUM(IF(customer_type = 'New', profit, 0)) AS new_profit,
+    
+    -- Returning Customer Breakdown
+    COUNT(DISTINCT IF(customer_type = 'Returning', customer_id, NULL)) AS returning_customers,
+    SUM(IF(customer_type = 'Returning', revenue, 0)) AS ret_rev,
+    SUM(IF(customer_type = 'Returning', profit, 0)) AS ret_profit
+    
+  FROM order_classification
+  GROUP BY 1, 2, 3, 4, 5, 6
+)
+
+SELECT * FROM daily_aggregation
+ORDER BY order_date DESC;
