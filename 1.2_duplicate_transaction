@@ -1,5 +1,8 @@
 SELECT 
-  customer_id, order_date, revenue, count(*) as dupe_count
+  order_id, 
+  COUNT(*) as occurrences,
+  COUNT(DISTINCT customer_id) as unique_customers,
+  COUNT(DISTINCT order_date) as unique_dates
 FROM `enter.tablename_123456.events_*`
-GROUP BY 1, 2, 3
-HAVING dupe_count > 1
+GROUP BY 1
+HAVING occurrences > 1
