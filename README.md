@@ -62,3 +62,9 @@ To ensure the infrastructure is robust, this repo includes two testing datasets.
 2. **Audit:** Run scripts **1.1 through 1.5**. Ensure the "Minefield" rows are successfully caught.
 3. **Visualization:** Switch to `green_dataset.csv` and run **4.1.3** to see the Bridge Financials in action.
 4. **Live Connection:** Update the `FROM` clauses to point to your production BigQuery events table.
+
+
+
+
+
+
