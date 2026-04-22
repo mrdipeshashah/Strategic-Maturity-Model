@@ -13,8 +13,6 @@ The repository and code is organized into four distinct modules:
 | **3.0** | **Migration** | Tracking matured LTV and side-by-side performance of yearly cohorts. |
 | **4.0** | **Strategic Bridge** | Deep dives into CAC payback, bridge financials, and unit economic milestones. |
 
----
-
 ## 💡 Business Intelligence: Questions This Repository Solves
 
 * **Customer Maturation:** What is the realized value (LTV) of a customer acquired today after 30, 60, and 90 days? (**Module 3.2**)
