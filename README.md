@@ -6,7 +6,7 @@ Focusing on DTC/E-commerce business generating up to £10m in revenue I have dev
 ## 🚀 The Core Framework
 The repository is organized into four distinct modules:
 
-| Module | Scope | One-Liner Description |
+| Module | Scope | Description |
 | :--- | :--- | :--- |
 | **1.0** | **Validation** | Data integrity guardrails to ensure financial and identity accuracy. |
 | **2.0** | **Segmentation** | Analyzing the customer base by purchase frequency and profit buckets. |
