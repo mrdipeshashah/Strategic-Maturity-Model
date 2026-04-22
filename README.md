@@ -8,7 +8,7 @@ The repository is organized into four distinct modules:
 
 | Module | Scope | Description |
 | :--- | :--- | :--- |
-| **1.0** | **Validation** | Data integrity guardrails to ensure financial and identity accuracy. |
+| **1.0** | **Validation** | Data integrity guardrails, ensuring financial and data accuracy. |
 | **2.0** | **Segmentation** | Analyzing the customer base by purchase frequency and profit buckets. |
 | **3.0** | **Migration** | Tracking matured LTV and side-by-side performance of yearly cohorts. |
 | **4.0** | **Strategic Bridge** | Deep dives into CAC payback, bridge financials, and unit economic milestones. |
