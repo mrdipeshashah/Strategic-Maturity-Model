@@ -23,7 +23,7 @@ The repository is organized into four distinct modules:
 * **Retention Economics:** Is it more cost-effective to acquire a new customer or reactivate a churned one? (**Module 4.2**)
 * **Marketing Timing:** What is the "Golden Window" (average days between orders) where a customer is most likely to repurchase? (**Module 3.4**)
 
-## 🛠️ The "Minefield" Testing Suite
+## TESTING
 To ensure the infrastructure is robust, this repo includes two testing datasets.
 
 ### 🔴 The Red Dataset (Stress Test)
@@ -33,7 +33,7 @@ To ensure the infrastructure is robust, this repo includes two testing datasets.
 ### 🟢 The Green Dataset (Migration Flow)
 * **Purpose:** To demonstrate a perfect 90-day LTV migration and "Bridge" success.
 
-## 📂 Comprehensive File Index
+## THE MODULES
 
 ### **1.0 Data Integrity & Validation**
 * **1.1 Nulls and Blanks:** Detects orphaned orders missing customer identifiers.
@@ -67,7 +67,7 @@ To ensure the infrastructure is robust, this repo includes two testing datasets.
 * **4.3 CAC Payback Profit Milestone:** Calculates the exact day a customer covers their acquisition cost.
 * **4.4 Monthly Yearly Performance:** The "Executive View" for long-term strategic forecasting.
 
-## 📈 Implementation Guide
+## Implementation Guide
 1. **Ingestion:** Upload `red_dataset.csv` first.
 2. **Audit:** Run scripts **1.1 through 1.5**. Ensure the "Minefield" rows are successfully caught.
 3. **Visualization:** Switch to `green_dataset.csv` and run **4.1.3** to see the Bridge Financials in action.
