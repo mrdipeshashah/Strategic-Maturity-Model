@@ -1,4 +1,4 @@
-# STRATEGIC MATURITY MODEL: LTV & Retention Infrastructure
+# STRATEGIC MATURITY MODEL
 
 ## OVERVIEW
 Focusing on DTC/E-commerce business generating up to £10m in revenue I have developed a process using the Google Ecoysystem to better understand LTV which is supported by a robust set of metrics. it takes DTC/E-commerce brands from raw data to  **Strategic Maturity**. 
