@@ -13,6 +13,14 @@ The repository is organized into four distinct modules:
 | **3.0** | **Migration** | Tracking matured LTV and side-by-side performance of yearly cohorts. |
 | **4.0** | **Strategic Bridge** | Deep dives into CAC payback, bridge financials, and unit economic milestones. |
 
+## DATA FOUNDATIONS 
+
+THe most critical step is collecting the right data and getting is structured in the right way. 
+
+This Google Doc provides an example of the data required, how it should be structured. A copy of the Google can be made. 
+
+https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
+
 ## THE BUSINESS QUESTIONS THAT CAN BE ASKED 
 
 * **Customer Maturation:** What is the LTV value of a customer acquired today after 30, 60, and 90 days? (**Module 3.2**)
@@ -32,6 +40,9 @@ To ensure the infrastructure is robust, this repo includes two testing datasets.
 
 ### 🟢 The Green Dataset (Migration Flow)
 * **Purpose:** To demonstrate a perfect 90-day LTV migration and "Bridge" success.
+
+
+
 
 ## THE MODULES
 
