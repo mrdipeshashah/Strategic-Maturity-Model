@@ -37,22 +37,22 @@ To ensure the infrastructure is robust, this repo includes two testing datasets.
 
 ### **1.0 Data Integrity & Validation**
 * **1.1 Nulls and Blanks:** Detects orphaned orders missing customer identifiers.
-* **1.2 Duplicate Transaction:** Identifies "Ghost Duplicates" where a transaction occurs twice.
+* **1.2 Duplicate Transaction:** Identifies "Duplicates" where a transaction occurs twice.
 * **1.3 Date Range Validation:** Ensures the dataset fits within expected logical time bounds.
 * **1.4 Validating Dates Day0:** Flags "Future Orders" and identifies date format flips (DD/MM vs MM/DD).
 * **1.5 Financial Validation:** Uses `SAFE_DIVIDE` to prevent system crashes on zero-revenue orders.
 
 ### **2.0 Performance & Segmentation**
 * **2.1 Cohort Size:** Tracks the volume of customers acquired in specific time periods.
-* **2.2 Annual Active Customer:** Measures the "Pulse" of the brand by identifying active vs. lapsed users.
+* **2.2 Annual Active Customer:** Measures the health of the brand by identifying active vs. lapsed users.
 * **2.3 Frequency Bucket Analysis:** Groups customers by "number of times purchased" (1x, 2x, 3x+).
 * **2.4 Monthly Bucket Analysis:** Tracks how purchase frequency shifts month-over-month.
 * **2.5 Profit Bucket Analysis:** Segments the database by actual margin contributed per customer.
 
 ### **3.0 LTV & Cohort Maturation**
 * **3.1 LTV Bucket Summary:** High-level overview of LTV distribution across the base.
-* **3.2 Mater Matured LTV:** Calculates the realized value of a cohort after it has "aged" (e.g., 12 months).
-* **3.3 Yearly Side-by-Side Performance:** Compares the quality/LTV of 2023 cohorts vs 2024 cohorts.
+* **3.2 Mater Matured LTV:** Calculates the value of a cohort after it has "aged" (e.g., 12 months).
+* **3.3 Yearly Side-by-Side Performance:** Compares the quality/LTV i.e., 2023 cohorts vs 2024 cohorts.
 * **3.4 Days Between Orders:** Calculates "Retention Velocity" to inform email/SMS marketing timing.
 
 ### **4.0 The Strategic Bridge (Consultant View)**
