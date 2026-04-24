@@ -91,9 +91,36 @@ Green Dataset - https://docs.google.com/spreadsheets/d/1aY6ut88A6mO_ZCtAPMZAAxOZ
 
 Run all modules. 4.1.3 should be an interesting one to understand 
 
+## EVOLVING THE DATA REQIREMENTS TO DO GEO + PRODUCT LTV 
 
+To better understand product LTV the data requirements are: 
 
+* customer_id
+* order_date
+* product_id (sku_id)
+* product_name 
+* revenue
+* profit
 
+To better understand geo LTV the data requirements are: 
+
+* customer_id
+* order_date
+* city_id/postcode
+* city_name 
+* revenue
+* profit
+
+The master view would comibne customer + product + geo 
+
+* customer_id
+* order_date
+* product_id(sku_id)
+* product_name
+* city_id/postcode
+* city_name
+* revenue
+* profit
 
 
 
