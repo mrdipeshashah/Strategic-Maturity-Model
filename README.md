@@ -66,7 +66,7 @@ Key watchouts:
 * **3.1 LTV Bucket Summary:** High-level overview of LTV distribution across the base.
 * **3.2 Mater Matured LTV:** Calculates the value of a cohort after it has "aged" (e.g., 12 months).
 * **3.3 Yearly Side-by-Side Performance:** Compares the quality/LTV i.e., 2023 cohorts vs 2024 cohorts.
-* **3.4 Days Between Orders:** Calculates "Retention Velocity" to inform email/SMS marketing timing.
+* **3.4 Days Between Orders:** Calculates "Retention Velocity" which could help inform email/SMS marketing campaign timings.
 
 ### **4.0 The Strategic Bridge**
 * **4.1.0 Migration Retention Profitability:** Tracks the total profit gain as customers migrate from New to Returning.
