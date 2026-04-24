@@ -15,7 +15,7 @@ The repository is organized into four distinct modules:
 
 ## DATA FOUNDATIONS 
 
-THe most critical step is collecting the right data and getting is structured in the right way. 
+THe most critical step is collecting the right data and getting the right data structure. 
 
 This Google Doc provides an example of the data required, how it should be structured. A copy of the Google can be made. 
 
