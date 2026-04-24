@@ -83,11 +83,15 @@ Key watchouts:
 ## TESTING
 To get started I have shared two testing datasets. 
 
-Red Dataset - https://docs.google.com/spreadsheets/d/1og04NJxjfeBYWcuTw5WFuoWs5siGREiIdg6Oqa5wMgw/edit?usp=sharing
+Red Dataset - dataset with many errors
+
+https://docs.google.com/spreadsheets/d/1og04NJxjfeBYWcuTw5WFuoWs5siGREiIdg6Oqa5wMgw/edit?usp=sharing
 
 Run module 1.0 - Data Integrity & Validation it should throw out multiple errors meaning till the data gets fixed it cannot proceed any further 
 
-Green Dataset - https://docs.google.com/spreadsheets/d/1aY6ut88A6mO_ZCtAPMZAAxOZxihWw9qk2FjWtaS6SUM/edit?usp=sharing
+Green Dataset - the pefect dataset, with clean, structured data 
+
+https://docs.google.com/spreadsheets/d/1aY6ut88A6mO_ZCtAPMZAAxOZxihWw9qk2FjWtaS6SUM/edit?usp=sharing
 
 Run all modules. 4.1.3 should be an interesting one to understand 
 
