@@ -81,20 +81,16 @@ Key watchouts:
 * **4.4 Monthly Yearly Performance:** The "Executive View" for long-term strategic forecasting.
 
 ## TESTING
-To ensure the infrastructure is robust, this repo includes two testing datasets.
+To get started I have shared two testing datasets. 
 
-### 🔴 The Red Dataset (Stress Test)
-* **Purpose:** To intentionally trigger errors and validate the "Security" scripts.
-* **Key Tests:** Case-sensitivity splits, division-by-zero math errors, and future-dated orders.
+Red Dataset - https://docs.google.com/spreadsheets/d/1og04NJxjfeBYWcuTw5WFuoWs5siGREiIdg6Oqa5wMgw/edit?usp=sharing
 
-### 🟢 The Green Dataset (Migration Flow)
-* **Purpose:** To demonstrate a perfect 90-day LTV migration and "Bridge" success.
+Run module 1.0 - Data Integrity & Validation it should throw out multiple errors meaning till the data gets fixed it cannot proceed anyfurther 
 
+Green Dataset - https://docs.google.com/spreadsheets/d/1aY6ut88A6mO_ZCtAPMZAAxOZxihWw9qk2FjWtaS6SUM/edit?usp=sharing
 
-## Implementation Guide
-1. **Ingestion:** Upload `red_dataset.csv` first.
-2. **Audit:** Run scripts **1.1 through 1.5**. Ensure the "Minefield" rows are successfully caught.
-3. **Visualization:** Switch to `green_dataset.csv` and run **4.1.3** to see the Bridge Financials in action.
+Run all modules. 4.1.3 should be an interesting one to understand 
+
 
 
 
