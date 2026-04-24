@@ -21,6 +21,22 @@ This Google Doc provides an example of the data required, how it should be struc
 
 https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
 
+The data requirements are: 
+
+* customer_id
+* order_date
+* revenue
+* profit
+
+Key watchouts: 
+
+* The order_date is always YYYY-MM-DD i.e., 2026-06-13
+* Revenue and Profit values are not mixed up i.e., profit is not greater than revenue
+* Ensure both are numeric not text
+* Consistency of customer_id its always lowercase or uppercase and not mixed
+* Ensure there’s no trailing space
+* No duplicate records
+
 ## THE BUSINESS QUESTIONS THAT CAN BE ASKED 
 
 * **Customer Maturation:** What is the LTV value of a customer acquired today after 30, 60, and 90 days? (**Module 3.2**)
