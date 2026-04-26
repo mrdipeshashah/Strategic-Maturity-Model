@@ -131,19 +131,21 @@ Created a calculator designed to translate raw customer data into a high-level g
 
 https://docs.google.com/spreadsheets/d/1q2Ah-IfcfJ73Ik6Fc-FeK-5Kp9aRrTUNTmpf2V__aiw/edit?usp=sharing
 
-## Dashboard Metrics (Section 2)
+# LTV Scaling & Strategic Moat Calculator
 
+This calculator translates customer data into a high-level growth strategy by isolating "First Order" unit economics from long-term lifetime value.
+
+## Dashboard Metrics (Section 2)
 These metrics represent the **Net Profitability** of your acquisition engine.
 
 | Metric | Unit | Definition |
 | :--- | :--- | :--- |
-| **Day 0 Net Cash Flow** | £ Total | Total profit (or loss) after accounting for Product COGS and Ad Spend for the entire cohort. |
+| **Day 0 Net Cash Flow** | £ Total | The total profit or loss for the cohort after subtracting Marketing Costs (CAC) from the initial Gross Profit. |
 | **Month 12 Cohort Profit** | £ Total | The estimated total profit from this group after 1 year, including repeat "Bridge" revenue. |
 | **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user and hit £0 profit at Year 1. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—the net profit or loss realized on the very first transaction per user. |
 
 ## Growth Levers: The "Strategic Moat" (Section 4)
-
 This section quantifies the financial impact of specific strategic interventions per user.
 
 | Metric | Unit | Definition |
@@ -154,13 +156,12 @@ This section quantifies the financial impact of specific strategic interventions
 | **Combined Strategic Moat** | £ / User | **The Multiplier Effect.** The total profit lift realized when retention and spend improvements compound. |
 
 ## The "Moat" Logic
-
 The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
 
 $$\text{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})$$
 
-### How to Use
+### 🛠️ How to Use
 
 1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the input cells (Section 1 and 3).
 2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "Bridge" to reach profitability.
-3. **Simulate Growth:** Adjust the levers in Section 4 to see how a "Strategic Moat" flips a loss-making cohort into a high-margin profit center.
+3. **Simulate Growth:** Adjust the levers in Section 4 to see how a "Strategic Moat" flips a loss-making cohort into a profit center.
