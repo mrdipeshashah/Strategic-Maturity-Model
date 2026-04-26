@@ -132,13 +132,11 @@ The master view would comibne customer + product + geo
 * profit
 
 ## LTV STRATEGIC CALCULATOR 
-Created a calculator designed to translate raw customer data into a high-level growth insights. It isolates the "First Order" cost of acquisition from the "Bridge" (2nd order) to lifetime profitability.
+A calculator designed to translate raw customer data into a high-level growth insights. It isolates the "First Order" cost of acquisition from the "Bridge" (2nd order) to lifetime profitability.
 
 https://docs.google.com/spreadsheets/d/1q2Ah-IfcfJ73Ik6Fc-FeK-5Kp9aRrTUNTmpf2V__aiw/edit?usp=sharing
 
-# LTV Scaling & Strategic Moat Calculator
-
-This calculator translates customer data into a high-level growth strategy by isolating "First Order" unit economics from long-term lifetime value.
+The calculator is dynamic with the goal to better undersrand Profit Per User. It automatically scales based on AOV and Bridge targets, showing exactly how much additional CAC can be afforded as back-end efficiency improves.
 
 ## Dashboard Metrics (Section 2)
 These metrics represent the **Net Profitability** of your acquisition engine.
