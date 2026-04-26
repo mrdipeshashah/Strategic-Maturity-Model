@@ -3,6 +3,11 @@
 ## OVERVIEW
 Focusing on DTC/E-commerce business generating up to £10m in revenue I have developed a process using the Google Ecoysystem to better understand LTV which is supported by a robust set of metrics. It takes DTC/E-commerce brands from raw data to **Strategic Maturity**. 
 
+### 🎯 Strategic Outcomes:
+* **Stop the Waste:** Identify the "one-and-done" customers and the channels that bring them.
+* **Master the Bridge:** Calculate the exact conversion rate and profit jump from Purchase 1 to Purchase 2.
+* **Own the Forecast:** Use historic cohort maturation to predict next year's revenue with financial rigor, not hope.
+
 ## THE FRAMEWORK
 The repository is organized into four distinct modules:
 
