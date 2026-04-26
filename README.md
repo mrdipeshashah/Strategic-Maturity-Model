@@ -148,7 +148,7 @@ These metrics represent the **Net Profitability** of your acquisition engine.
 | **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user while breaking even over 12 months. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—the net profit or loss realized on the very first transaction per user. |
 
-## Growth Levers: The "Strategic Moat" (Section 4)
+## Dashboard Metrics (Section 4)
 This section quantifies the financial impact of specific strategic interventions per user.
 
 | Metric | Unit | Definition |
@@ -165,9 +165,8 @@ The **Combined Strategic Moat** proves that growth is multiplicative. When you i
 
 Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Old Bridge Rate)
 
-
 ### How to Use
 
-1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the input cells (Section 1 and 3).
-2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "Bridge" to reach profitability.
-3. **Simulate Growth:** Adjust the levers in Section 4 to see how a "Strategic Moat" flips a loss-making cohort into a profit center.
+1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the input blue cells (Section 1 and 3).
+2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "2nd purchase" to reach profitability.
+3. **Simulate Growth:** Profit Per User and Max Allowable CAC provide the **Strategic Insights** to outscale competitors.
