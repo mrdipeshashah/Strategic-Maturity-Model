@@ -126,5 +126,50 @@ The master view would comibne customer + product + geo
 * revenue
 * profit
 
+## LTV STRATEGIC CALCULATOR 
+
+# 🧮 LTV Scaling & Strategic Moat Calculator
+
+This calculator is designed to translate raw customer data into a high-level growth strategy. It isolates the "First Order" cost of acquisition from the "Bridge" to lifetime profitability.
+
+---
+
+## 📈 Dashboard Metrics (Section 2)
+These metrics represent the **Profit Position** of your current acquisition engine.
+
+| Metric | Unit | Definition |
+| :--- | :--- | :--- |
+| **Day 0 Net Cash Flow** | £ Total | Initial profit position after accounting for COGS and Ad Spend on the first purchase. |
+| **Month 12 Cohort Profit** | £ Total | The estimated total profit from this group after 1 year of repeat purchase behavior. |
+| **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user while remaining profitable at Year 1. |
+| **Current Profit Gap** | £ / User | The "Marketing Treadmill"—how much profit is lost or gained on the very first transaction. |
+
+---
+
+## 🚀 Growth Levers: The "Strategic Moat" (Section 4)
+This section quantifies the financial impact of specific strategic interventions per user.
+
+| Metric | Unit | Definition |
+| :--- | :--- | :--- |
+| **Baseline LTV** | £ / User | The current total profit value of a single customer over 12 months. |
+| **Improve Bridge (+10%)** | £ / User | Profit added per user by retaining 1 in 10 customers who currently churn. |
+| **Increase Order 2 AOV** | £ / User | Profit added per user by increasing the spend of existing returning customers by £10. |
+| **Combined Strategic Moat** | £ / User | **The Multiplier Effect.** The total profit lift when retention and spend improvements compound. |
+
+---
+
+## 🧪 The "Moat" Logic
+The **Combined Strategic Moat** is the centerpiece of this model. It proves that growth is multiplicative, not additive. 
+
+If you improve both Retention and AOV, you get a "bonus" lift because your new retained customers are also spending at the new, higher rate.
+
+$$\text{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})$$
+
+---
+
+### 🛠️ How to Use
+1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the designated input cells.
+2. **Review the Gap:** Check the **Current Profit Gap**. If it's negative, the business is subsidizing the first purchase.
+3. **Simulate Growth:** Adjust the "Levers" in Section 4 to see how a "Strategic Moat" flips a loss-making cohort into a profit center.
 
 
