@@ -127,9 +127,6 @@ The master view would comibne customer + product + geo
 * profit
 
 ## LTV STRATEGIC CALCULATOR 
-
-# 🧮 LTV Scaling & Strategic Moat Calculator
-
 This calculator is designed to translate raw customer data into a high-level growth strategy. It isolates the "First Order" cost of acquisition from the "Bridge" to lifetime profitability.
 
 ---
