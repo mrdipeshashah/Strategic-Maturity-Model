@@ -147,7 +147,7 @@ These metrics represent the **Net Profitability** of your acquisition engine.
 | :--- | :--- | :--- |
 | **Day 0 Net Cash Flow** | £ Total | The total profit or loss for the cohort after subtracting Marketing Costs (CAC) from the initial Gross Profit. |
 | **Month 12 Cohort Profit** | £ Total | The estimated total profit from this group after 1 year, including repeat "Bridge" revenue. |
-| **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user and hit £0 profit at Year 1. |
+| **Max Allowable CAC** | £ / User | The maximum amount you can spend on marketing while breaking even over 12 months. As our "Moat" increases, this ceiling rises, allowing us to outspend competitors. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—the net profit or loss realized on the very first transaction per user. |
 
 ## Growth Levers: The "Strategic Moat" (Section 4)
