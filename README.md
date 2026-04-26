@@ -147,7 +147,7 @@ These metrics represent the **Net Profitability** of your acquisition engine.
 | :--- | :--- | :--- |
 | **Day 0 Net Cash Flow** | £ Total | The total profit or loss for the cohort after subtracting Marketing Costs (CAC) from the initial Gross Profit. |
 | **Month 12 Cohort Profit** | £ Total | The estimated total profit from this group after 1 year, including repeat "Bridge" revenue. |
-| **Max Allowable CAC** | £ / User | The maximum amount you can spend on marketing while breaking even over 12 months. As our "Moat" increases, this ceiling rises, allowing us to outspend competitors. |
+| **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user while breaking even over 12 months. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—the net profit or loss realized on the very first transaction per user. |
 
 ## Growth Levers: The "Strategic Moat" (Section 4)
@@ -156,9 +156,9 @@ This section quantifies the financial impact of specific strategic interventions
 | Metric | Unit | Definition |
 | :--- | :--- | :--- |
 | **Baseline LTV** | £ / User | The current total projected profit value of a single customer over 12 months. |
-| **Improve Bridge (+10%)** | £ / User | Profit added per user by increasing the retention rate (saving 1 in 10 customers from churning). |
+| **Improve Bridge (+10%)** | £ / User | Profit added per user by increasing the retention rate (e.g., from 30% to 45%). |
 | **Increase Order 2 AOV** | £ / User | Profit added per user by increasing the repeat spend of existing returning customers by £10. |
-| **Profit Per User** | £ / User | **The Multiplier Effect.** The total profit lift realized when retention and spend improvements compound. |
+| **Profit Per User** | £ / User | **Total Profit Per User Lift.** The compounding profit realized when retention and spend improvements work together. |
 
 ## The "Moat" Logic
 The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
