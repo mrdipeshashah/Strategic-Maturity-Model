@@ -163,9 +163,10 @@ This section quantifies the financial impact of specific strategic interventions
 ## The "Moat" Logic
 The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
 
-$$\text{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})$$
+**The Formula:**
 
-{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})
+Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Old Bridge Rate)
+
 
 ### How to Use
 
