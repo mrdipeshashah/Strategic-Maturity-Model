@@ -160,7 +160,7 @@ The **Combined Strategic Moat** proves that growth is multiplicative. When you i
 
 $$\text{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})$$
 
-### 🛠️ How to Use
+### How to Use
 
 1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the input cells (Section 1 and 3).
 2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "Bridge" to reach profitability.
