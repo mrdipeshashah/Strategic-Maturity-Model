@@ -158,7 +158,7 @@ This section quantifies the financial impact of specific strategic interventions
 | **Baseline LTV** | £ / User | The current total projected profit value of a single customer over 12 months. |
 | **Improve Bridge (+10%)** | £ / User | Profit added per user by increasing the retention rate (saving 1 in 10 customers from churning). |
 | **Increase Order 2 AOV** | £ / User | Profit added per user by increasing the repeat spend of existing returning customers by £10. |
-| **Combined Strategic Moat** | £ / User | **The Multiplier Effect.** The total profit lift realized when retention and spend improvements compound. |
+| **Profit Per User** | £ / User | **The Multiplier Effect.** The total profit lift realized when retention and spend improvements compound. |
 
 ## The "Moat" Logic
 The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
