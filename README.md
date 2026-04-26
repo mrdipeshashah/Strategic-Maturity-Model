@@ -131,7 +131,7 @@ Created a calculator designed to translate raw customer data into a high-level g
 
 https://docs.google.com/spreadsheets/d/1q2Ah-IfcfJ73Ik6Fc-FeK-5Kp9aRrTUNTmpf2V__aiw/edit?usp=sharing
 
-## 📈 Dashboard Metrics (Section 2)
+## Dashboard Metrics (Section 2)
 These metrics represent the **Profit Position** of your current acquisition engine.
 
 | Metric | Unit | Definition |
@@ -141,7 +141,7 @@ These metrics represent the **Profit Position** of your current acquisition engi
 | **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user while remaining profitable at Year 1. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—how much profit is lost or gained on the very first transaction. |
 
-## 🚀 Growth Levers: The "Strategic Moat" (Section 4)
+## Growth Levers: The "Strategic Moat" (Section 4)
 This section quantifies the financial impact of specific strategic interventions per user.
 
 | Metric | Unit | Definition |
@@ -151,14 +151,14 @@ This section quantifies the financial impact of specific strategic interventions
 | **Increase Order 2 AOV** | £ / User | Profit added per user by increasing the spend of existing returning customers by £10. |
 | **Combined Strategic Moat** | £ / User | **The Multiplier Effect.** The total profit lift when retention and spend improvements compound. |
 
-## 🧪 The "Moat" Logic
+## The "Moat" Logic
 The **Combined Strategic Moat** is the centerpiece of this model. It proves that growth is multiplicative, not additive. 
 
 If you improve both Retention and AOV, you get a "bonus" lift because your new retained customers are also spending at the new, higher rate.
 
 $$\text{Total Lift} = (\text{New AOV} \times \text{Margin} \times \text{New Bridge Rate}) - (\text{Old AOV} \times \text{Margin} \times \text{Old Bridge Rate})$$
 
-### 🛠️ How to Use
+### How to Use
 1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the designated input cells.
 2. **Review the Gap:** Check the **Current Profit Gap**. If it's negative, the business is subsidizing the first purchase.
 3. **Simulate Growth:** Adjust the "Levers" in Section 4 to see how a "Strategic Moat" flips a loss-making cohort into a profit center.
