@@ -131,7 +131,7 @@ The master view would comibne customer + product + geo
 * revenue
 * profit
 
-## LTV STRATEGIC CALCULATOR 
+## LTV STRATEGIC CALCULATOR (SCENARIO PLANNER)
 A calculator designed to translate raw customer data into a high-level growth insights. It isolates the "First Order" cost of acquisition from the "Bridge" (2nd order) to lifetime profitability.
 
 https://docs.google.com/spreadsheets/d/1q2Ah-IfcfJ73Ik6Fc-FeK-5Kp9aRrTUNTmpf2V__aiw/edit?usp=sharing
