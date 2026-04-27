@@ -170,6 +170,6 @@ Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Ol
 
 ### How to Use
 
-1. **Input Data:** Enter Monthly Users, CAC, AOV, and Margins into the input blue cells (Section 1 and 3).
+1. **Input Data:** Input int othe blue cells: Monthly Users, CAC, AOV, and Margins (Section 1 and 3).
 2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "2nd purchase" to reach profitability.
 3. **Simulate Growth:** Profit Per User and Max Allowable CAC provide the **Strategic Insights** to outscale competitors.
