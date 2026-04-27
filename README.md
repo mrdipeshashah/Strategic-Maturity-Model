@@ -162,7 +162,7 @@ This section quantifies the financial impact of specific strategic interventions
 | **Profit Swing** | % / User | **Turnaround Magnitude.** Measures the total value created by the strategy (Moat + Gap recovery) relative to the initial loss.|
 
 ## Calculating Unit Economic Lift
-The **Combined Strategic Moat** proves that growth is multiplicative. When improving both Retention and AOV, it gains a "compounding bonus" because newly retained customers are also spending at the higher AOV.
+When improving both Retention and AOV, it gains a "compounding bonus", newly retained customers are also spending at the higher AOV.
 
 **The Formula:**
 
