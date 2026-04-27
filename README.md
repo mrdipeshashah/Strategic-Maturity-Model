@@ -161,16 +161,14 @@ This section quantifies the financial impact of specific strategic interventions
 | **Profit Per User** | £ / User | Profit Lift (Orders 1-2). The additional profit realized per user by optimizing the path from the first to the second purchase. |
 | **Profit Swing** | % / User | **Turnaround Magnitude.** Measures the total value created by the strategy (Moat + Gap recovery) relative to the initial loss.|
 
-## The "Moat" Logic
-The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
-
-The **Combined Strategic Moat** proves that growth is multiplicative. By fixing the bridge between Order 1 and Order 2, we turn a "Day 0" loss into a "Year 1" profit engine.
+## Calculating Unit Economic Lift
+The **Combined Strategic Moat** proves that growth is multiplicative. When improving both Retention and AOV, it gains a "compounding bonus" because newly retained customers are also spending at the higher AOV.
 
 **The Formula:**
 
 Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Old Bridge Rate)
 
-### How to Use
+### How to Use Google Sheet - LTV Strategic Calculator
 
 1. **Input Data:** Input into the blue cells: Monthly Users, CAC, AOV, and Margins (Section 1 and 3).
 2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "2nd purchase" to reach profitability.
