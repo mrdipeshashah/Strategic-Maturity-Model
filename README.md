@@ -164,6 +164,8 @@ This section quantifies the financial impact of specific strategic interventions
 ## The "Moat" Logic
 The **Combined Strategic Moat** proves that growth is multiplicative. When you improve both Retention and AOV, you gain a "compounding bonus" because your newly retained customers are also spending at the higher AOV.
 
+The **Combined Strategic Moat** proves that growth is multiplicative. By fixing the bridge between Order 1 and Order 2, we turn a "Day 0" loss into a "Year 1" profit engine.
+
 **The Formula:**
 
 Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Old Bridge Rate)
