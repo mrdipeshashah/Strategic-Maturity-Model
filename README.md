@@ -140,7 +140,7 @@ https://docs.google.com/spreadsheets/d/1q2Ah-IfcfJ73Ik6Fc-FeK-5Kp9aRrTUNTmpf2V__
 
 The calculator is dynamic with the goal to better undersrand Profit Per User. It automatically scales based on AOV and Bridge targets, showing exactly how much additional CAC can be afforded as back-end efficiency improves.
 
-## Dashboard Metrics (Section 2)
+## Key Metrics (Section 2)
 These metrics represent the **Net Profitability** of your acquisition engine.
 
 | Metric | Unit | Definition |
@@ -150,7 +150,7 @@ These metrics represent the **Net Profitability** of your acquisition engine.
 | **Max Allowable CAC** | £ / User | The break-even ceiling; the maximum you can spend to acquire a user while breaking even over 12 months. |
 | **Current Profit Gap** | £ / User | The "Marketing Treadmill"—the net profit or loss realized on the very first transaction per user. |
 
-## Dashboard Metrics (Section 4)
+## Growth Levers (Section 4)
 This section quantifies the financial impact of specific strategic interventions per user.
 
 | Metric | Unit | Definition |
