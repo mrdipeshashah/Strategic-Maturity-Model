@@ -4,7 +4,7 @@
 Focusing on DTC/E-commerce business generating up to £10m in revenue I have developed a process using the Google Ecoysystem to better understand LTV which is supported by a robust set of metrics. It takes DTC/E-commerce brands from raw data to **Strategic Maturity**. 
 
 ### Strategic Outcomes:
-* Moving away from matrics such as ROAS + Traffic moving to LTV and Bridge (2nd order) efficiency.
+* Moving away from matrics such as ROAS + Traffic to LTV and Bridge (2nd order) efficiency.
 * Identifying when the exact no of days when a customer becomes profitable 
 * Understanding the conversion rate from 1st purchase to 2nd purchase
 * Identifying one time customers v loyal customers
