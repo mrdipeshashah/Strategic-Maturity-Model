@@ -21,7 +21,7 @@ The repository is organized into four distinct modules:
 | **4.0** | **Strategic Bridge** | Deep dives into CAC payback, bridge financials, and unit economic milestones. |
 
 ## DATA FOUNDATIONS 
-THe most critical step is collecting the right data and getting the right data structure. 
+The most critical step is collecting the right data and getting the right data structure. 
 
 This Google Doc provides an example of the data required, how it should be structured.
 
