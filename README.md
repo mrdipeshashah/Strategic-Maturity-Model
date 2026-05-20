@@ -45,7 +45,7 @@ Key watchouts:
 
 ## THE BUSINESS QUESTIONS THAT CAN BE ASKED 
 
-* **Customer Maturation:** What is the LTV value of a customer acquired today after 30, 60, and 90 days? (**Module 3.2**)
+* **Customer Maturity:** What is the LTV value of a customer acquired today after 30, 60, and 90 days? (**Module 3.2**)
 * **Payback Velocity:** How many days does it take for a customer’s cumulative profit to exceed their acquisition cost (CAC)? (**Module 3.3**)
 * **Predictive Forecasting:** Based on historic cohort decay and retention yields, what is the revenue forecast for the next quarter? (**Module 4.4**)
 * **The "Bridge" Efficiency:** What percentage of customers move from first to second purchase, and how does it impact profit margin? (**Module 4.1.3**)
