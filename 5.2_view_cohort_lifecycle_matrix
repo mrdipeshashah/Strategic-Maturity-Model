@@ -1,0 +1,60 @@
+CREATE OR REPLACE VIEW `mrdipeshashah.customersalesdata.view_cohort_lifecycle_matrix` AS
+WITH base_orders AS (
+  SELECT * FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+),
+
+cohort_sizes AS (
+  -- Calculates total acquired users per monthly cohort
+  SELECT
+    DATE_TRUNC(first_order_date, MONTH) AS cohort_month,
+    COUNT(DISTINCT customer_id) AS total_acquired_cohort
+  FROM base_orders
+  WHERE order_sequence = 1
+  GROUP BY 1
+),
+
+cohort_performance AS (
+  -- Measures performance elapsed by days since first purchase
+  SELECT
+    DATE_TRUNC(o.first_order_date, MONTH) AS cohort_month,
+    DATE_DIFF(o.order_date, o.first_order_date, DAY) AS days_since_first_order,
+    COUNT(DISTINCT o.customer_id) AS active_customers,
+    SUM(o.revenue) AS period_revenue,
+    SUM(o.profit) AS period_profit,
+    COUNTIF(o.order_sequence = 2) AS bridge_conversions
+  FROM base_orders o
+  GROUP BY 1, 2
+)
+
+SELECT
+  p.cohort_month,
+  s.total_acquired_cohort,
+  p.days_since_first_order,
+  -- Standardization into fixed maturity buckets
+  CASE 
+    WHEN p.days_since_first_order = 0 THEN 'Day 000'
+    WHEN p.days_since_first_order BETWEEN 1 AND 30 THEN 'Day 030'
+    WHEN p.days_since_first_order BETWEEN 31 AND 60 THEN 'Day 060'
+    WHEN p.days_since_first_order BETWEEN 61 AND 90 THEN 'Day 090'
+    WHEN p.days_since_first_order BETWEEN 91 AND 180 THEN 'Day 180'
+    WHEN p.days_since_first_order BETWEEN 181 AND 365 THEN 'Day 365'
+    ELSE 'Day 365+'
+  END AS ltv_time_bucket,
+  p.active_customers,
+  p.period_revenue,
+  p.period_profit,
+  p.bridge_conversions,
+  -- Cumulative totals across cohort lifespan
+  SUM(p.period_revenue) OVER(PARTITION BY p.cohort_month ORDER BY p.days_since_first_order ASC) AS cumulative_cohort_revenue,
+  SUM(p.period_profit) OVER(PARTITION BY p.cohort_month ORDER BY p.days_since_first_order ASC) AS cumulative_cohort_profit,
+  -- Cumulative LTV revenue & profit per acquired customer
+  SAFE_DIVIDE(
+    SUM(p.period_revenue) OVER(PARTITION BY p.cohort_month ORDER BY p.days_since_first_order ASC),
+    s.total_acquired_cohort
+  ) AS cumulative_ltv_revenue,
+  SAFE_DIVIDE(
+    SUM(p.period_profit) OVER(PARTITION BY p.cohort_month ORDER BY p.days_since_first_order ASC),
+    s.total_acquired_cohort
+  ) AS cumulative_ltv_profit
+FROM cohort_performance p
+JOIN cohort_sizes s ON p.cohort_month = s.cohort_month;
