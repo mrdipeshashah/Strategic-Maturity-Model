@@ -1,0 +1,13 @@
+CREATE OR REPLACE VIEW `mrdipeshashah.customersalesdata.view_data_quality_audit` AS
+SELECT
+  CURRENT_TIMESTAMP() AS audit_run_timestamp,
+  -- Script 1.1: Missing keys
+  COUNTIF(customer_id IS NULL OR customer_id = '') AS missing_customer_ids,
+  -- Script 1.3 & 1.4: Date checks
+  COUNTIF(order_date IS NULL) AS null_order_dates,
+  COUNTIF(CAST(order_date AS DATE) > CURRENT_DATE()) AS future_dated_orders,
+  -- Script 1.5: Financial sanity checks
+  COUNTIF(revenue IS NULL OR revenue < 0) AS invalid_revenue_records,
+  COUNTIF(profit IS NULL) AS null_profit_records,
+  COUNT(*) AS total_records_scanned
+FROM `mrdipeshashah.customersalesdata.ecommerce`;
