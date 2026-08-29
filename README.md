@@ -173,3 +173,24 @@ Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Ol
 1. **Input Data:** Input into the blue cells: Monthly Users, CAC, AOV, and Margins (Section 1 and 3).
 2. **Review the Gap:** Check the **Current Profit Gap**. If it is negative, you are paying a "fee" to acquire customers and relying entirely on the "2nd purchase" to reach profitability.
 3. **Simulate Growth:** Profit Per User and Max Allowable CAC provide the **Strategic Insights** to outscale competitors.
+
+## GOOGLE CLOUD - BIG QUERY DATA WAREHOUSE DEPLOYMENT (+ DATA STUDIO)
+
+To scale beyond spreadsheet limits, the standalone analytical models (`1.x` through `4.x`) are compiled into **3 Master BigQuery Views** under section `5.x`. This setup serves as the presentation layer for Looker Studio, supporting Executive Mobile, Executive Desktop, and Operational Deep-Dive dashboards.
+
+### Production SQL Architecture (`5.x`)
+
+* **`5.1_view_order_grain_master.sql`**
+  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_order_grain_master`
+  * **Consolidates:** `1.2`, `2.2`, `3.4`, `4.1.3`, `4.1.5`, and `4.2`
+  * **Purpose:** Establishes an order-level granularity dataset. Computes chronological purchase sequences (`order_sequence`), days to second order (`days_to_next_order`), inter-purchase time gaps (`days_between_orders`), and cumulative realized customer profit. Powers both Executive Scorecard summaries and granular dashboard filters.
+
+* **`5.2_view_cohort_lifecycle_matrix.sql`**
+  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_cohort_lifecycle_matrix`
+  * **Consolidates:** `2.1`, `2.3`, `2.4`, `2.5`, `3.1`, `3.2`, `4.1.0`, `4.1.1`, `4.1.2`, and `4.3`
+  * **Purpose:** Pre-aggregates cumulative cohort dynamics across standard elapsed maturation buckets (`Day 000` through `Day 365+`). Powers Looker Studio cohort heatmaps, cumulative LTV expansion curves, and CAC payback tracking without client-side lag.
+
+* **`5.3_view_data_quality_audit.sql`**
+  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_data_quality_audit`
+  * **Consolidates:** `1.1`, `1.3`, `1.4`, and `1.5`
+  * **Purpose:** Serves as an automated data validation monitor. Scans raw transactional ingest for null keys, future-dated records, or revenue/profit discrepancies, exposing these metrics to a hidden Admin Data Health page.
