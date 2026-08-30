@@ -1,30 +1,25 @@
-SELECT 
-  EXTRACT(YEAR FROM first_purchase_date) AS cohort_year,
-  CASE 
-    WHEN total_profit >= 400 THEN '1. Super Whale ($400+)'
-    WHEN total_profit >= 250 THEN '2. Whale ($250-$399)'
-    WHEN total_profit >= 150 THEN '3. Profitable ($150-$249)'
-    ELSE '4. Low Value (<$150)'
+WITH cleaned_data AS (
+  SELECT DISTINCT
+    customer_id,
+    COALESCE(profit, 0) AS profit
+  FROM `mrdipeshashah.customersalesdata.ecommerce`
+  WHERE customer_id IS NOT NULL
+),
+customer_profit AS (
+  SELECT
+    customer_id,
+    SUM(profit) AS net_customer_profit
+  FROM cleaned_data
+  GROUP BY customer_id
+)
+SELECT
+  CASE
+    WHEN net_customer_profit <= 0 THEN 'Negative / Unprofitable'
+    WHEN net_customer_profit BETWEEN 0.01 AND 100 THEN 'Low Value (£0-£100)'
+    WHEN net_customer_profit BETWEEN 100.01 AND 500 THEN 'Mid Value (£100-£500)'
+    ELSE 'High Value (£500+)'
   END AS profit_bucket,
   COUNT(customer_id) AS customer_count,
-  
-  -- Financial Context
-  ROUND(SUM(total_revenue), 0) AS bucket_revenue,
-  ROUND(SUM(total_profit), 0) AS bucket_profit,
-  
-  -- Performance Metrics
-  ROUND(SUM(total_revenue) / SUM(no_of_purchases), 2) AS aov_per_bucket,
-  ROUND(SUM(total_profit) / SUM(no_of_purchases), 2) AS avg_profit_per_order,
-  ROUND(AVG(total_profit), 2) AS avg_lifetime_profit_per_cust
-FROM (
-  SELECT 
-    customer_id, 
-    MIN(order_date) as first_purchase_date,
-    COUNT(*) as no_of_purchases,
-    SUM(revenue) as total_revenue,
-    SUM(profit) as total_profit
-  FROM `enter.tablename_123456.events_*`
-  GROUP BY 1
-)
-GROUP BY 1, 2
-ORDER BY 1, 2;
+  SUM(net_customer_profit) AS total_bucket_profit
+FROM customer_profit
+GROUP BY 1;
