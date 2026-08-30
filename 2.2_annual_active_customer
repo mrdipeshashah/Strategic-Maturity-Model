@@ -1,8 +1,16 @@
-SELECT 
-  EXTRACT(YEAR FROM order_date) AS calendar_year,
+WITH cleaned_data AS (
+  SELECT DISTINCT
+    customer_id,
+    CAST(order_date AS DATE) AS order_date,
+    COALESCE(revenue, 0) AS revenue
+  FROM `mrdipeshashah.customersalesdata.ecommerce`
+  WHERE customer_id IS NOT NULL 
+    AND order_date IS NOT NULL
+)
+SELECT
+  EXTRACT(YEAR FROM order_date) AS order_year,
   COUNT(DISTINCT customer_id) AS annual_active_customers,
-  SUM(revenue) AS annual_revenue,
-  SUM(profit) AS annual_profit
-FROM `enter.tablename_123456.events_*`
-GROUP BY 1
-ORDER BY 1;
+  COUNT(1) AS total_orders,
+  SUM(revenue) AS total_revenue
+FROM cleaned_data
+GROUP BY order_year;
