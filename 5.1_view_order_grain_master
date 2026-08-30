@@ -1,4 +1,3 @@
-CREATE OR REPLACE VIEW `mrdipeshashah.customersalesdata.view_order_grain_master` AS
 WITH deduplicated_orders AS (
   -- Script 1.2: Deduplicate records & handle nulls
   SELECT DISTINCT
@@ -30,6 +29,9 @@ SELECT
   revenue,
   profit,
   first_order_date,
+  -- Added fields to streamline Page 1 views:
+  DATE_TRUNC(first_order_date, MONTH) AS cohort_month,
+  DATE_TRUNC(order_date, MONTH) AS order_month,
   order_sequence,
   -- Script 4.1.3: Speed to cross the bridge (Days between Order 1 and Order 2)
   CASE 
