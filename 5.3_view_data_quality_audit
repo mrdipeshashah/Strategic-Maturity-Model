@@ -1,13 +1,48 @@
 CREATE OR REPLACE VIEW `mrdipeshashah.customersalesdata.view_data_quality_audit` AS
+WITH raw_metrics AS (
+  -- Diagnostic checks & raw financial totals from raw ingest table
+  SELECT
+    -- Truncates microsecond sub-seconds to display clean YYYY-MM-DD HH:MM:SS
+    DATETIME_TRUNC(CURRENT_DATETIME(), SECOND) AS audit_run_timestamp,
+    -- Script 1.1: Missing keys
+    COUNTIF(customer_id IS NULL OR customer_id = '') AS missing_customer_ids,
+    -- Script 1.3 & 1.4: Date checks
+    COUNTIF(order_date IS NULL) AS null_order_dates,
+    COUNTIF(CAST(order_date AS DATE) > CURRENT_DATE()) AS future_dated_orders,
+    -- Script 1.5: Financial sanity checks
+    COUNTIF(revenue IS NULL OR revenue < 0) AS invalid_revenue_records,
+    COUNTIF(profit IS NULL) AS null_profit_records,
+    COUNT(*) AS total_records_scanned,
+    -- Financial totals for reconciliation
+    SUM(COALESCE(revenue, 0)) AS raw_total_revenue,
+    SUM(COALESCE(profit, 0)) AS raw_total_profit
+  FROM `mrdipeshashah.customersalesdata.ecommerce`
+),
+
+master_metrics AS (
+  -- Processed financial totals from master grain view
+  SELECT
+    SUM(COALESCE(revenue, 0)) AS master_total_revenue,
+    SUM(COALESCE(profit, 0)) AS master_total_profit
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+)
+
 SELECT
-  CURRENT_TIMESTAMP() AS audit_run_timestamp,
-  -- Script 1.1: Missing keys
-  COUNTIF(customer_id IS NULL OR customer_id = '') AS missing_customer_ids,
-  -- Script 1.3 & 1.4: Date checks
-  COUNTIF(order_date IS NULL) AS null_order_dates,
-  COUNTIF(CAST(order_date AS DATE) > CURRENT_DATE()) AS future_dated_orders,
-  -- Script 1.5: Financial sanity checks
-  COUNTIF(revenue IS NULL OR revenue < 0) AS invalid_revenue_records,
-  COUNTIF(profit IS NULL) AS null_profit_records,
-  COUNT(*) AS total_records_scanned
-FROM `mrdipeshashah.customersalesdata.ecommerce`;
+  r.audit_run_timestamp,
+  r.missing_customer_ids,
+  r.null_order_dates,
+  r.future_dated_orders,
+  r.invalid_revenue_records,
+  r.null_profit_records,
+  r.total_records_scanned,
+  
+  -- Financial Sanity Reconciliation Fields
+  r.raw_total_revenue AS raw_ingest_revenue,
+  m.master_total_revenue AS master_grain_revenue,
+  (r.raw_total_revenue - m.master_total_revenue) AS revenue_leakage_gap,
+  
+  r.raw_total_profit AS raw_ingest_profit,
+  m.master_total_profit AS master_grain_profit,
+  (r.raw_total_profit - m.master_total_profit) AS profit_leakage_gap
+FROM raw_metrics r
+CROSS JOIN master_metrics m;
