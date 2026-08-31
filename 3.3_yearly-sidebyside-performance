@@ -1,53 +1,31 @@
-WITH customer_base AS (
-  SELECT 
-    customer_id, 
-    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
-    MIN(order_date) AS first_purchase_date,
-    DATE_DIFF(CURRENT_DATE(), MIN(order_date), DAY) AS individual_age_days
-  FROM `enter.tablename_123456.events_*`
-  GROUP BY 1
+WITH customer_lifespan AS (
+  SELECT
+    customer_id,
+    order_date,
+    first_order_date,
+    revenue,
+    profit,
+    DATE_DIFF(DATE_TRUNC(order_date, MONTH), DATE_TRUNC(first_order_date, MONTH), MONTH) AS age_month
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
 ),
-cohort_milestones AS (
-  SELECT 
-    b.cohort_year,
-    b.customer_id,
-    b.individual_age_days,
-    -- Velocity Milestones (The "Speed" Metrics)
-    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 30 THEN t.profit ELSE 0 END) AS prof_30d,
-    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 60 THEN t.profit ELSE 0 END) AS prof_60d, -- ADDED
-    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 90 THEN t.profit ELSE 0 END) AS prof_90d,
-    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 180 THEN t.profit ELSE 0 END) AS prof_180d,
-    -- Full Year Target
-    SUM(CASE WHEN DATE_DIFF(t.order_date, b.first_purchase_date, DAY) <= 365 THEN t.profit ELSE 0 END) AS prof_365d
-  FROM customer_base b
-  LEFT JOIN `enter.tablename_123456.events_*` t 
-    ON t.customer_id = b.customer_id
-  GROUP BY 1, 2, 3
+total_unique_customers AS (
+  SELECT COUNT(DISTINCT customer_id) AS grand_total_customers
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+),
+milestone_totals AS (
+  SELECT
+    c.age_month,
+    SUM(c.revenue) AS monthly_revenue,
+    SUM(c.profit) AS monthly_profit
+  FROM customer_lifespan c
+  GROUP BY c.age_month
 )
-
-SELECT 
-  cohort_year,
-  COUNT(customer_id) AS total_customers_in_cohort,
-  
-  -- 1. Velocity Columns (Early Efficiency)
-  ROUND(AVG(CASE WHEN individual_age_days >= 30 THEN prof_30d END), 2) AS avg_profit_30d,
-  ROUND(AVG(CASE WHEN individual_age_days >= 60 THEN prof_60d END), 2) AS avg_profit_60d, -- ADDED
-  ROUND(AVG(CASE WHEN individual_age_days >= 90 THEN prof_90d END), 2) AS avg_profit_90d,
-  ROUND(AVG(CASE WHEN individual_age_days >= 180 THEN prof_180d END), 2) AS avg_profit_180d,
-
-  -- 2. Matured LTV (The "Fair Fight" Benchmark)
-  ROUND(AVG(CASE WHEN individual_age_days >= 365 THEN prof_365d END), 2) AS avg_ltv_matured_365d,
-
-  -- 3. Blended LTV (The "Real-Time" Total)
-  ROUND(AVG(prof_365d), 2) AS avg_ltv_blended_to_date,
-
-  -- 4. Status Column
-  CASE 
-    WHEN MIN(individual_age_days) >= 365 THEN 'Fully Matured'
-    WHEN MAX(individual_age_days) < 365 THEN 'Early Stage'
-    ELSE 'Maturing (Mixed)'
-  END AS cohort_status
-
-FROM cohort_milestones
-GROUP BY 1
-ORDER BY 1;
+SELECT
+  m.age_month AS cohort_age_months,
+  SUM(m.monthly_revenue) OVER(ORDER BY m.age_month ASC) AS total_cumulative_revenue,
+  SUM(m.monthly_profit) OVER(ORDER BY m.age_month ASC) AS total_cumulative_profit,
+  ROUND(SUM(m.monthly_revenue) OVER(ORDER BY m.age_month ASC) / t.grand_total_customers, 2) AS avg_cumulative_ltv_revenue,
+  ROUND(SUM(m.monthly_profit) OVER(ORDER BY m.age_month ASC) / t.grand_total_customers, 2) AS avg_cumulative_ltv_profit
+FROM milestone_totals m
+CROSS JOIN total_unique_customers t
+WHERE m.age_month <= 24;
