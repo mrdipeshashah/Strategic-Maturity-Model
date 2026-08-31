@@ -1,7 +1,18 @@
+WITH ordered_purchases AS (
+  SELECT 
+    customer_id,
+    order_date,
+    ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_sequence,
+    LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_date
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+)
 SELECT 
-  customer_id,
-  order_date,
-  -- Calculates days since the previous order for that specific customer
-  DATE_DIFF(order_date, LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date), DAY) as days_between_orders
-FROM `enter.tablename_123456.events_*`
-ORDER BY customer_id, order_date
+  CONCAT('Order ', order_sequence - 1, ' to ', order_sequence) AS purchase_interval,
+  COUNT(DISTINCT customer_id) AS total_repeat_orders,
+  ROUND(AVG(DATE_DIFF(order_date, previous_order_date, DAY)), 1) AS avg_days_between_orders,
+  APPROX_QUANTILES(DATE_DIFF(order_date, previous_order_date, DAY), 100)[OFFSET(50)] AS median_days_between_orders
+FROM ordered_purchases
+WHERE previous_order_date IS NOT NULL
+GROUP BY order_sequence
+HAVING order_sequence <= 5
+ORDER BY order_sequence ASC;
