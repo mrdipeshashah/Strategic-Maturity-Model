@@ -1,25 +1,28 @@
 WITH cohort_data AS (
-  -- Identify which year each customer joined
-  SELECT 
-    customer_id, 
+  -- Step 1: Identify acquisition year per customer
+  SELECT
+    customer_id,
     EXTRACT(YEAR FROM MIN(order_date)) AS joined_year
-  FROM `enter.tablename_123456.events_*`
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
   GROUP BY 1
 ),
+
 yearly_performance AS (
-  -- Calculate performance by calendar year and cohort
-  SELECT 
+  -- Step 2: Calculate performance by calendar year and cohort
+  SELECT
     EXTRACT(YEAR FROM t.order_date) AS calendar_year,
     c.joined_year AS cohort,
     SUM(t.revenue) AS revenue,
     SUM(t.profit) AS profit
-  FROM `enter.tablename_123456.events_*` t
-  JOIN cohort_data c ON t.customer_id = c.customer_id
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master` t
+  JOIN cohort_data c 
+    ON t.customer_id = c.customer_id
   GROUP BY 1, 2
 ),
+
 totals AS (
-  -- Get the total for the whole calendar year to use as a denominator
-  SELECT 
+  -- Step 3: Compute aggregate annual baseline totals for percentage denominators
+  SELECT
     calendar_year,
     SUM(revenue) AS total_calendar_revenue,
     SUM(profit) AS total_calendar_profit
@@ -27,15 +30,15 @@ totals AS (
   GROUP BY 1
 )
 
-SELECT 
+-- Step 4: Output cohort contribution amounts and percentage shares
+SELECT
   y.calendar_year,
   y.cohort,
   ROUND(y.revenue, 0) AS cohort_revenue,
-  -- Calculate % of the year's total revenue
   ROUND((y.revenue / t.total_calendar_revenue) * 100, 1) AS pct_of_total_revenue,
   ROUND(y.profit, 0) AS cohort_profit,
-  -- Calculate % of the year's total profit
   ROUND((y.profit / t.total_calendar_profit) * 100, 1) AS pct_of_total_profit
 FROM yearly_performance y
-JOIN totals t ON y.calendar_year = t.calendar_year
+JOIN totals t 
+  ON y.calendar_year = t.calendar_year
 ORDER BY 1 DESC, 2 ASC;
