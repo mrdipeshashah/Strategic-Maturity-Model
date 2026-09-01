@@ -34,7 +34,13 @@ SELECT
   milestone.day_bucket AS payback_milestone_day,
   ROUND(SUM(m.profit) / c.total_customers, 2) AS cumulative_profit_per_customer
 FROM order_milestones m
-CROSS JOIN UNNEST([30, 60, 90, 180, 365]) AS milestone(day_bucket)
+CROSS JOIN UNNEST([
+  STRUCT(30 AS day_bucket),
+  STRUCT(60 AS day_bucket),
+  STRUCT(90 AS day_bucket),
+  STRUCT(180 AS day_bucket),
+  STRUCT(365 AS day_bucket)
+]) AS milestone
 JOIN cohort_totals c ON m.cohort_year = c.cohort_year
 WHERE m.days_since_acquisition <= milestone.day_bucket
 GROUP BY 1, 2, c.total_customers
