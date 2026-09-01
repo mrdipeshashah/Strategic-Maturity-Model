@@ -1,60 +1,25 @@
-WITH order_sequencing AS (
-  SELECT 
+WITH customer_orders AS (
+  SELECT
     customer_id,
-    order_date,
     revenue,
     profit,
-    -- Tracks the sequence (1st, 2nd, 3rd...)
-    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number,
-    -- Tracks the total career orders for that customer
-    COUNT(*) OVER(PARTITION BY customer_id) as total_lifetime_orders
-  FROM `enter.tablename_123456.events_*`
-),
-first_order AS (
-  SELECT * FROM order_sequencing WHERE purchase_number = 1
-),
-second_order AS (
-  SELECT * FROM order_sequencing WHERE purchase_number = 2
-),
-third_plus_orders AS (
-  -- Aggregate all money from the 3rd purchase onwards
-  SELECT 
-    customer_id,
-    SUM(revenue) as extra_revenue,
-    SUM(profit) as extra_profit
-  FROM order_sequencing 
-  WHERE purchase_number >= 3
-  GROUP BY 1
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
 )
 
-SELECT 
-  EXTRACT(YEAR FROM f.order_date) AS cohort_year,
-  COUNT(f.customer_id) AS new_customers,
-  
-  -- 1. THE GHOSTS (Exactly 1 Purchase Total)
-  COUNTIF(f.total_lifetime_orders = 1) AS ghost_count,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), 0) AS ghost_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_total_profit,
-
-  -- 2. THE BRIDGE (Exactly 2 Purchases Total)
-  COUNTIF(f.total_lifetime_orders = 2) AS bridge_count,
-  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.revenue + s.revenue, 0)), 0) AS bridge_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.profit + s.profit, 0)), 0) AS bridge_total_profit,
-  
-  -- 3. THE POWER USERS (3 or More Purchases Total)
-  COUNTIF(f.total_lifetime_orders >= 3) AS power_user_count,
-  -- Sum of 1st + 2nd + (3rd, 4th, 5th...)
-  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.revenue + s.revenue + t.extra_revenue, 0)), 0) AS power_user_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.profit + s.profit + t.extra_profit, 0)), 0) AS power_user_total_profit,
-  
-  -- 4. KPI & TIMING
-  -- Average days from 1st to 2nd purchase for anyone who made it that far
-  ROUND(AVG(DATE_DIFF(s.order_date, f.order_date, DAY)), 0) AS avg_days_to_2nd_purchase,
-  -- Math Check: This should equal 0 if the logic is watertight
-  COUNT(f.customer_id) - (COUNTIF(f.total_lifetime_orders = 1) + COUNTIF(f.total_lifetime_orders = 2) + COUNTIF(f.total_lifetime_orders >= 3)) AS math_check
-
-FROM first_order f
-LEFT JOIN second_order s ON f.customer_id = s.customer_id
-LEFT JOIN third_plus_orders t ON f.customer_id = t.customer_id
+SELECT
+  CASE 
+    WHEN order_seq = 1 THEN 'Order 1 (Acquisition)'
+    WHEN order_seq = 2 THEN 'Order 2 (First Repeat)'
+    ELSE 'Order 3+ (Loyalty)'
+  END AS order_stage,
+  COUNT(DISTINCT customer_id) AS total_customers,
+  COUNT(1) AS total_orders,
+  ROUND(SUM(revenue), 2) AS total_revenue,
+  ROUND(SUM(profit), 2) AS total_profit,
+  ROUND(AVG(revenue), 2) AS avg_order_value,
+  ROUND(AVG(profit), 2) AS avg_profit_per_order
+FROM customer_orders
+WHERE order_seq <= 3
 GROUP BY 1
-ORDER BY 1 DESC;
+ORDER BY order_stage ASC;
