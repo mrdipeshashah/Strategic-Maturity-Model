@@ -1,58 +1,20 @@
-WITH order_sequencing AS (
-  SELECT 
+WITH sequenced_orders AS (
+  SELECT
     customer_id,
     order_date,
     revenue,
     profit,
-    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) as purchase_number,
-    COUNT(*) OVER(PARTITION BY customer_id) as total_lifetime_orders
-  FROM `enter.tablename_123456.events_*`
-),
-first_order AS (
-  SELECT * FROM order_sequencing WHERE purchase_number = 1
-),
-second_order AS (
-  SELECT * FROM order_sequencing WHERE purchase_number = 2
-),
-third_plus_orders AS (
-  SELECT 
-    customer_id,
-    SUM(revenue) as extra_revenue,
-    SUM(profit) as extra_profit
-  FROM order_sequencing 
-  WHERE purchase_number >= 3
-  GROUP BY 1
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
 )
 
-SELECT 
-  FORMAT_DATE('%Y-%m', f.order_date) AS cohort_month,
-  COUNT(f.customer_id) AS new_customers,
-  
-  -- 1. THE GHOSTS (Exactly 1 Purchase)
-  COUNTIF(f.total_lifetime_orders = 1) AS ghost_count,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.revenue, 0)), 0) AS ghost_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders = 1, f.profit, 0)), 0) AS ghost_total_profit,
-
-  -- 2. THE BRIDGE (Exactly 2 Purchases)
-  COUNTIF(f.total_lifetime_orders = 2) AS bridge_count,
-  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.revenue + s.revenue, 0)), 0) AS bridge_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders = 2, f.profit + s.profit, 0)), 0) AS bridge_total_profit,
-  
-  -- 3. THE POWER USERS (3+ Purchases)
-  COUNTIF(f.total_lifetime_orders >= 3) AS power_user_count,
-  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.revenue + s.revenue + t.extra_revenue, 0)), 0) AS power_user_total_rev,
-  ROUND(SUM(IF(f.total_lifetime_orders >= 3, f.profit + s.profit + t.extra_profit, 0)), 0) AS power_user_total_profit,
-  
-  -- 4. TIMING & EFFICIENCY
-  ROUND(AVG(DATE_DIFF(s.order_date, f.order_date, DAY)), 0) AS avg_days_to_2nd_purchase,
-  ROUND(SAFE_DIVIDE(SUM(IF(f.total_lifetime_orders >= 3, f.profit + s.profit + t.extra_profit, 0)), COUNTIF(f.total_lifetime_orders >= 3)), 2) AS profit_per_power_user,
-
-  -- MATH VALIDATION (Should be 0)
-  COUNT(f.customer_id) - (COUNTIF(f.total_lifetime_orders = 1) + COUNTIF(f.total_lifetime_orders = 2) + COUNTIF(f.total_lifetime_orders >= 3)) AS math_check
-
-FROM first_order f
-LEFT JOIN second_order s ON f.customer_id = s.customer_id
-LEFT JOIN third_plus_orders t ON f.customer_id = t.customer_id
-WHERE f.order_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 18 MONTH)
+SELECT
+  DATE_TRUNC(order_date, MONTH) AS transaction_month,
+  COUNT(DISTINCT CASE WHEN order_seq = 1 THEN customer_id END) AS new_customers_acquired,
+  COUNT(DISTINCT CASE WHEN order_seq = 2 THEN customer_id END) AS repeat_customers_converted,
+  ROUND(SUM(CASE WHEN order_seq = 1 THEN revenue ELSE 0 END), 2) AS order_1_revenue,
+  ROUND(SUM(CASE WHEN order_seq = 2 THEN revenue ELSE 0 END), 2) AS order_2_revenue,
+  ROUND(SUM(CASE WHEN order_seq = 2 THEN profit ELSE 0 END), 2) AS order_2_profit
+FROM sequenced_orders
 GROUP BY 1
-ORDER BY 1 DESC;
+ORDER BY transaction_month ASC;
