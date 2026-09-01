@@ -1,43 +1,43 @@
 WITH customer_cohorts AS (
-  SELECT 
-    customer_id, 
+  -- Step 1: Assign acquisition cohort year per customer
+  SELECT
+    customer_id,
     EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year
-  FROM `enter.tablename_123456.events_*`
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
   GROUP BY 1
 ),
-yearly_activity AS (
+
+cohort_sizes AS (
+  -- Step 2: Establish base customer volume per cohort
   SELECT 
-    customer_id, 
-    EXTRACT(YEAR FROM order_date) AS activity_year,
-    SUM(revenue) AS yearly_rev,
-    SUM(profit) AS yearly_prof
-  FROM `enter.tablename_123456.events_*`
+    cohort_year,
+    COUNT(DISTINCT customer_id) AS original_cohort_size
+  FROM customer_cohorts
+  GROUP BY 1
+),
+
+yearly_activity AS (
+  -- Step 3: Aggregate annual revenue and profit by cohort and performance year
+  SELECT
+    c.cohort_year,
+    EXTRACT(YEAR FROM t.order_date) AS activity_year,
+    COUNT(DISTINCT t.customer_id) AS active_customers,
+    SUM(t.revenue) AS yearly_revenue,
+    SUM(t.profit) AS yearly_profit
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master` t
+  JOIN customer_cohorts c ON t.customer_id = c.customer_id
   GROUP BY 1, 2
 )
 
-SELECT 
-  c.cohort_year,
-  COUNT(DISTINCT c.customer_id) AS original_cohort_size,
-  
-  -- 2023 PERFORMANCE
-  COUNT(DISTINCT IF(a.activity_year = 2023, a.customer_id, NULL)) AS active_2023,
-  ROUND(COUNT(DISTINCT IF(a.activity_year = 2023, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2023,
-  ROUND(SUM(IF(a.activity_year = 2023, a.yearly_rev, 0)), 0) AS rev_2023,
-  ROUND(SUM(IF(a.activity_year = 2023, a.yearly_prof, 0)), 0) AS prof_2023,
-
-  -- 2024 PERFORMANCE
-  COUNT(DISTINCT IF(a.activity_year = 2024, a.customer_id, NULL)) AS active_2024,
-  ROUND(COUNT(DISTINCT IF(a.activity_year = 2024, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2024,
-  ROUND(SUM(IF(a.activity_year = 2024, a.yearly_rev, 0)), 0) AS rev_2024,
-  ROUND(SUM(IF(a.activity_year = 2024, a.yearly_prof, 0)), 0) AS prof_2024,
-
-  -- 2025 PERFORMANCE
-  COUNT(DISTINCT IF(a.activity_year = 2025, a.customer_id, NULL)) AS active_2025,
-  ROUND(COUNT(DISTINCT IF(a.activity_year = 2025, a.customer_id, NULL)) / COUNT(DISTINCT c.customer_id) * 100, 1) AS retention_pct_2025,
-  ROUND(SUM(IF(a.activity_year = 2025, a.yearly_rev, 0)), 0) AS rev_2025,
-  ROUND(SUM(IF(a.activity_year = 2025, a.yearly_prof, 0)), 0) AS prof_2025
-
-FROM customer_cohorts c
-LEFT JOIN yearly_activity a ON c.customer_id = a.customer_id
-GROUP BY 1
-ORDER BY 1;
+-- Step 4: Final output table for Looker Studio cohort matrix
+SELECT
+  a.cohort_year,
+  s.original_cohort_size,
+  a.activity_year,
+  a.active_customers,
+  ROUND((a.active_customers / s.original_cohort_size) * 100, 1) AS retention_pct,
+  ROUND(a.yearly_revenue, 0) AS cohort_yearly_revenue,
+  ROUND(a.yearly_profit, 0) AS cohort_yearly_profit
+FROM yearly_activity a
+JOIN cohort_sizes s ON a.cohort_year = s.cohort_year
+ORDER BY a.cohort_year ASC, a.activity_year ASC;
