@@ -1,38 +1,33 @@
-WITH customer_base AS (
-  SELECT 
-    customer_id, 
-    EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year,
-    MIN(order_date) AS first_purchase_date,
-    MAX(order_date) AS last_purchase_date,
-    COUNT(*) AS total_purchases, 
-    SUM(revenue) AS total_lifetime_revenue,
-    SUM(profit) AS total_lifetime_profit
-  FROM `enter.tablename_123456.events_*`
-  GROUP BY 1
+WITH ordered_purchases AS (
+  SELECT
+    customer_id,
+    order_date,
+    ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
+  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
 ),
-latency_calc AS (
-  SELECT 
-    *,
-    DATE_DIFF(last_purchase_date, first_purchase_date, DAY) AS days_to_last_purchase
-  FROM customer_base
-  WHERE total_purchases > 1 
+
+first_second_gaps AS (
+  SELECT
+    p1.customer_id,
+    p1.order_date AS first_order_date,
+    p2.order_date AS second_order_date,
+    DATE_DIFF(p2.order_date, p1.order_date, DAY) AS days_to_second_order
+  FROM ordered_purchases p1
+  JOIN ordered_purchases p2 ON p1.customer_id = p2.customer_id AND p2.order_seq = 2
+  WHERE p1.order_seq = 1
 )
 
-SELECT 
-  cohort_year,
-  CASE 
-    WHEN days_to_last_purchase <= 30 THEN '0-30 Days (Hyper-Active)'
-    WHEN days_to_last_purchase <= 90 THEN '31-90 Days (Consistent)'
-    WHEN days_to_last_purchase <= 180 THEN '91-180 Days (Seasonal)'
-    WHEN days_to_last_purchase <= 365 THEN '181-365 Days (Annual)'
-    ELSE '365+ Days (Resurrected/Late Money)'
-  END AS retention_window,
-  COUNT(customer_id) AS customer_count,
-  ROUND(SUM(total_lifetime_revenue), 0) AS total_revenue,
-  ROUND(SUM(total_lifetime_profit), 0) AS total_profit,
-  ROUND(AVG(total_lifetime_profit), 2) AS avg_ltv,
-  -- % of customers WITHIN that specific cohort year
-  ROUND(100 * COUNT(customer_id) / SUM(COUNT(customer_id)) OVER(PARTITION BY cohort_year), 1) AS pct_of_cohort_repeaters
-FROM latency_calc
-GROUP BY 1, 2
-ORDER BY cohort_year DESC, MIN(days_to_last_purchase) ASC;
+SELECT
+  CASE
+    WHEN days_to_second_order <= 30 THEN '01. 0-30 Days'
+    WHEN days_to_second_order <= 60 THEN '02. 31-60 Days'
+    WHEN days_to_second_order <= 90 THEN '03. 61-90 Days'
+    WHEN days_to_second_order <= 180 THEN '04. 91-180 Days'
+    WHEN days_to_second_order <= 365 THEN '05. 181-365 Days'
+    ELSE '06. 365+ Days'
+  END AS repurchase_window_bucket,
+  COUNT(customer_id) AS total_customers,
+  ROUND(AVG(days_to_second_order), 1) AS avg_days_in_bucket
+FROM first_second_gaps
+GROUP BY 1
+ORDER BY repurchase_window_bucket ASC;
