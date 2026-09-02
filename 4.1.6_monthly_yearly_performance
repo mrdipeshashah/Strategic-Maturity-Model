@@ -2,9 +2,11 @@ SELECT
   FORMAT_DATE('%Y-%m', order_date) AS month_year,
   EXTRACT(YEAR FROM order_date) AS calendar_year,
   COUNT(DISTINCT customer_id) AS monthly_active_customers,
+  COUNT(*) AS total_orders,
   SUM(revenue) AS total_revenue,
   SUM(profit) AS total_profit,
-  ROUND(SUM(revenue) / COUNT(*), 2) AS avg_order_value
-FROM `enter.tablename_123456.events_*`
+  ROUND(SAFE_DIVIDE(SUM(revenue), COUNT(*)), 2) AS avg_order_value,
+  ROUND(SAFE_DIVIDE(SUM(profit), SUM(revenue)) * 100, 2) AS profit_margin_percent
+FROM `enter.tablename.view_order_grain_master`
 GROUP BY 1, 2
-ORDER BY 1 ASC;
+ORDER BY month_year ASC;
