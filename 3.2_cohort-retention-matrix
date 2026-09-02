@@ -2,7 +2,7 @@ WITH cohort_sizes AS (
   SELECT
     DATE_TRUNC(first_order_date, MONTH) AS cohort_month,
     COUNT(DISTINCT customer_id) AS cohort_start_size
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename..view_order_grain_master`
   GROUP BY cohort_month
 ),
 active_customers_by_month AS (
@@ -10,7 +10,7 @@ active_customers_by_month AS (
     DATE_TRUNC(first_order_date, MONTH) AS cohort_month,
     DATE_DIFF(DATE_TRUNC(order_date, MONTH), DATE_TRUNC(first_order_date, MONTH), MONTH) AS cohort_age_months,
     COUNT(DISTINCT customer_id) AS active_customers
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename..view_order_grain_master`
   GROUP BY cohort_month, cohort_age_months
 )
 SELECT
