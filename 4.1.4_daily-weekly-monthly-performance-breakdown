@@ -6,6 +6,6 @@ SELECT
   ROUND(SUM(revenue), 2) AS gross_revenue,
   ROUND(SUM(profit), 2) AS net_profit,
   ROUND(SUM(revenue) / COUNT(1), 2) AS overall_aov
-FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+FROM `enter.tablename.view_order_grain_master`
 GROUP BY 1, 2
 ORDER BY performance_month ASC;
