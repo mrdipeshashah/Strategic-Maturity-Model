@@ -4,7 +4,7 @@ WITH ordered_purchases AS (
     order_date,
     ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS order_sequence,
     LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS previous_order_date
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 )
 SELECT 
   CONCAT('Order ', order_sequence - 1, ' to ', order_sequence) AS purchase_interval,
