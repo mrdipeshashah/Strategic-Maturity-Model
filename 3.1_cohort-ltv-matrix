@@ -5,7 +5,7 @@ WITH cohort_orders AS (
     DATE_DIFF(DATE_TRUNC(order_date, MONTH), DATE_TRUNC(first_order_date, MONTH), MONTH) AS cohort_age_months,
     revenue,
     profit
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename..view_order_grain_master`
 ),
 cohort_sizes AS (
   SELECT
