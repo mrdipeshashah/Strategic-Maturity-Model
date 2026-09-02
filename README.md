@@ -15,10 +15,11 @@ The repository is organized into four distinct modules:
 
 | Module | Scope | Description |
 | :--- | :--- | :--- |
-| **1.0** | **Validation** | Data integrity guardrails, ensuring financial and data accuracy. |
-| **2.0** | **Segmentation** | Analyzing the customer base by purchase frequency and profit buckets. |
-| **3.0** | **Migration** | Tracking matured LTV and side-by-side performance of yearly cohorts. |
-| **4.0** | **Strategic Bridge** | Deep dives into CAC payback, bridge financials, and unit economic milestones. |
+| **1.0** | **Validation** | Data integrity guardrails ensuring financial accuracy and single-source-of-truth alignment. |
+| **2.0** | **Segmentation** | Customer purchase frequency, profit-bucket stratification, and baseline channel health. |
+| **3.0** | **Migration & LTV** | Matured milestone tracking (30, 60, 90, 180, 365 days) and year-over-year cohort behavior. |
+| **4.0** | **CAC & Payback** | Blended CAC payback windows, marketing efficiency metrics, and capital allocation modeling. |
+| **5.0** | **Behavioral Audit** | Order 1 to 2 conversion bridges, repurchase time-lag intervals, and late-money yield auditing. |
 
 ## DATA FOUNDATIONS 
 The most critical step is collecting the right data and getting the right data structure. 
