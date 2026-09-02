@@ -21,6 +21,14 @@ The repository is organized into four distinct modules:
 | **4.0** | **CAC & Payback** | Blended CAC payback windows, marketing efficiency metrics, and capital allocation modeling. |
 | **5.0** | **Behavioral Audit** | Order 1 to 2 conversion bridges, repurchase time-lag intervals, and late-money yield auditing. |
 
+## LIGHTWEIGHT SANDBOX: GOOGLE SHEETS LTV TEMPLATE
+
+Before deploying a full cloud infrastructure (BigQuery + Looker Studio), teams can validate their core unit economics, cohort behavior, and bridge metrics locally using the included **Google Sheets LTV Starter Model**. 
+
+This spreadsheet mirrors the logic executed in BigQuery, making it an ideal prototyping sandbox for smaller datasets or pre-pipeline data modelling.
+
+https://docs.google.com/spreadsheets/d/1piQJXYqLxgbeNgUCNmA902QwG2YnptvYeJZIjDwZKyk/edit?usp=sharing
+
 ## DATA FOUNDATIONS 
 The most critical step is collecting the right data and getting the right data structure. 
 
