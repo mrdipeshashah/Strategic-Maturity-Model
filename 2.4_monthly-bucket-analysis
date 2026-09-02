@@ -4,7 +4,7 @@ WITH cleaned_data AS (
     CAST(order_date AS DATE) AS order_date,
     COALESCE(revenue, 0) AS revenue,
     COALESCE(profit, 0) AS profit
-  FROM `mrdipeshashah.customersalesdata.ecommerce`
+  FROM `enter.tablename_123456.events_*`
   WHERE customer_id IS NOT NULL 
     AND order_date IS NOT NULL
 )
