@@ -99,7 +99,7 @@ There are 2 data pipelines that drives the SQL views:
 
 1) The raw transactional order table view that collates all the data (see data foundations) drives the following views: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5, 5.1, 5.3   
 
-2) The raw transactional order table is core to the view_order_grain_master which drives the following views: 3.1, 3.2, 3.3, 3.4, 3.5, 4.1.0, 4.1.1, 4.1.2, 4.1.3, 4.1.3b, 4.1.4, 4.1.5, 4.1.6, 4.2, 5.2, 5.3
+2) The raw transactional order table is core to the view_order_grain_master (single source of truth) which drives the following views: 3.1, 3.2, 3.3, 3.4, 3.5, 4.1.0, 4.1.1, 4.1.2, 4.1.3, 4.1.3b, 4.1.4, 4.1.5, 4.1.6, 4.2, 5.2, 5.3
 
 ## TESTING
 To get started I have shared two testing datasets. 
