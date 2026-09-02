@@ -5,7 +5,7 @@ WITH sequenced_orders AS (
     revenue,
     profit,
     ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 )
 
 SELECT
