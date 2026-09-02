@@ -2,7 +2,7 @@ WITH customer_cohorts AS (
   SELECT
     customer_id,
     EXTRACT(YEAR FROM MIN(order_date)) AS cohort_year
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
   GROUP BY 1
 )
 
@@ -16,7 +16,7 @@ SELECT
   COUNT(DISTINCT t.customer_id) AS active_customers,
   ROUND(SUM(t.revenue), 2) AS total_revenue,
   ROUND(SUM(t.profit), 2) AS total_profit
-FROM `mrdipeshashah.customersalesdata.view_order_grain_master` t
+FROM `enter.tablename.view_order_grain_master` t
 JOIN customer_cohorts c ON t.customer_id = c.customer_id
 GROUP BY 1, 2, 3
 ORDER BY calendar_year ASC, cohort_year ASC;
