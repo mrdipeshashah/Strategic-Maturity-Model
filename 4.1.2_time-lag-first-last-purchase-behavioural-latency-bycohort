@@ -3,7 +3,7 @@ WITH ordered_purchases AS (
     customer_id,
     order_date,
     ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 ),
 
 first_second_gaps AS (
