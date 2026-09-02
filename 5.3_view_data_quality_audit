@@ -15,7 +15,7 @@ WITH raw_metrics AS (
     -- Financial totals for reconciliation
     SUM(COALESCE(revenue, 0)) AS raw_total_revenue,
     SUM(COALESCE(profit, 0)) AS raw_total_profit
-  FROM `mrdipeshashah.customersalesdata.red_dataset`
+  FROM `enter.tablename_123456.events_*`
 ),
 
 master_metrics AS (
@@ -23,7 +23,7 @@ master_metrics AS (
   SELECT
     SUM(COALESCE(revenue, 0)) AS master_total_revenue,
     SUM(COALESCE(profit, 0)) AS master_total_profit
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master_red`
+  FROM `enter.tablename.view_order_grain_master`
 )
 
 SELECT
