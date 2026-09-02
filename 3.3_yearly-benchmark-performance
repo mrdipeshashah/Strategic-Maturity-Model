@@ -6,11 +6,11 @@ WITH customer_lifespan AS (
     revenue,
     profit,
     DATE_DIFF(DATE_TRUNC(order_date, MONTH), DATE_TRUNC(first_order_date, MONTH), MONTH) AS age_month
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 ),
 total_unique_customers AS (
   SELECT COUNT(DISTINCT customer_id) AS grand_total_customers
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 ),
 milestone_totals AS (
   SELECT
