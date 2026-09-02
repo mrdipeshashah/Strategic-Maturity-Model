@@ -29,6 +29,23 @@ This spreadsheet mirrors the logic executed in BigQuery, making it an ideal prot
 
 https://docs.google.com/spreadsheets/d/1piQJXYqLxgbeNgUCNmA902QwG2YnptvYeJZIjDwZKyk/edit?usp=sharing
 
+#### Google Sheet 3. `KPI_Dashboard` (Executive Summary)
+Surfaces core health KPIs generated from the raw transaction data:
+* **Total Acquired Cohort & Bridge Crossings:** Measures conversion performance from 1st to 2nd purchase.
+* **Bridge Conversion Rate %:** Evaluates product-market fit and repeat adoption strength.
+* **Purchase Velocity & Time-Lag:** Tracks average days required to convert buyers to their second order.
+* **Initial vs. Repeat AOV:** Compares upfront basket scale against secondary order value.
+
+### When to Transition from Google Sheets to Google BigQuery
+
+| Evaluation Metric | Google Sheets Starter | BigQuery + Looker Studio |
+| :--- | :--- | :--- |
+| **Data Volume** | Best for < 25,000 transaction rows | Scalable to millions/billions of records |
+| **Execution Speed** | Real-time formula recalculation | Distributed cloud engine (SQL) |
+| **Automation** | Manual CSV copy-paste | Automated scheduled pipeline ingestion |
+| **Use Case** | Prototyping & quick health checks | Production auditing & executive reporting |
+
+
 ## DATA FOUNDATIONS 
 The most critical step is collecting the right data and getting the right data structure. 
 
