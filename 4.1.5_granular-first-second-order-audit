@@ -6,7 +6,7 @@ WITH customer_journey AS (
     profit,
     EXTRACT(YEAR FROM MIN(order_date) OVER(PARTITION BY customer_id)) AS cohort_year,
     ROW_NUMBER() OVER(PARTITION BY customer_id ORDER BY order_date ASC) AS order_seq
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
 ),
 
 cohort_summary AS (
