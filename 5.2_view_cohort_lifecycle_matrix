@@ -1,6 +1,5 @@
-CREATE OR REPLACE VIEW `mrdipeshashah.customersalesdata.view_cohort_lifecycle_matrix` AS
 WITH base_orders AS (
-  SELECT * FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  SELECT * FROM `enter.tablename.view_order_grain_master`
 ),
 
 cohort_sizes AS (
