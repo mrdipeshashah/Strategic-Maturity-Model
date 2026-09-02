@@ -2,7 +2,7 @@ WITH cleaned_data AS (
   SELECT DISTINCT
     customer_id,
     COALESCE(profit, 0) AS profit
-  FROM `mrdipeshashah.customersalesdata.ecommerce`
+  FROM `enter.tablename_123456.events_*`
   WHERE customer_id IS NOT NULL
 ),
 customer_profit AS (
