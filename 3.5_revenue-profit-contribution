@@ -3,7 +3,7 @@ WITH cohort_data AS (
   SELECT
     customer_id,
     EXTRACT(YEAR FROM MIN(order_date)) AS joined_year
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master`
+  FROM `enter.tablename.view_order_grain_master`
   GROUP BY 1
 ),
 
@@ -14,7 +14,7 @@ yearly_performance AS (
     c.joined_year AS cohort,
     SUM(t.revenue) AS revenue,
     SUM(t.profit) AS profit
-  FROM `mrdipeshashah.customersalesdata.view_order_grain_master` t
+  FROM `enter.tablename.view_order_grain_master` t
   JOIN cohort_data c 
     ON t.customer_id = c.customer_id
   GROUP BY 1, 2
