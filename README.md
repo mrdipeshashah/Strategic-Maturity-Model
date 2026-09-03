@@ -235,3 +235,21 @@ The standalone analytical models (`1.x` through `4.x`) are compiled into **3 Mas
   * **Dataset Target:** `enter.tablename.customersalesdata.view_data_quality_audit`
   * **Consolidates:** `1.1`, `1.3`, `1.4`, and `1.5`
   * **Purpose:** Serves as an automated data validation monitor. Scans raw transactional ingest for null keys, future-dated records, or revenue/profit discrepancies, exposing these metrics to a hidden Admin Data Health page.
+ 
+### Data Dashboard Suite Overview
+
+* **1. Data Engineering Audit Dashboard:** A dedicated, single-page pipeline health monitor designed to catch data quality issues at ingestion—tracking missing customer IDs, date format errors, financial anomalies, and revenue/profit leakage gaps before data reaches reporting layer
+* **2. The Master (Pages 1–6):** The comprehensive Single Source of Truth (SSOT) reporting suite covering the full customer analytics lifecycle from executive summaries down to cohort LTV trajectories, payback velocity, conversion time-lags, and monthly financial ledgers
+* **3. The Executive One-Pager (Desktop Page 1):** A streamlined desktop dashboard giving C-suite stakeholders an immediate view of top-line scale, unit economics, and core performance trends
+* **4. The One-Pager (Mobile View):** A vertically stacked, mobile-optimized view featuring core scorecards and condensed conversion matrices for fast executive checks 
+
+### Data Studio Calculated Fields Reference
+
+| Page # | Page Name | Looker Studio Calculated Fields & Logic |
+| :--- | :--- | :--- |
+| **Page 1** | **Executive Summary (One-Pager)** | • **`Month 3 LTV Profit`**: `SUM(Profit at Month 3) / COUNT_DISTINCT(Acquired Customers)`<br>• **`90 Days LTV Revenue`**: `SUM(Revenue at Day 90) / COUNT_DISTINCT(Acquired Customers)`<br>• **`Order 1 to 2 CR`**: `COUNT_DISTINCT(Customers >= 2 Orders) / COUNT_DISTINCT(Acquired Customers)`<br>• **`Avg Days to 2nd Purchase`**: `AVG(DATE_DIFF(Order 2 Date, Order 1 Date, DAY))`|
+| **Page 2** | **Cohort Retention & Behavioral Breakdown** | • **`Total Cohort Customers`**: `COUNT_DISTINCT(Customer ID)`<br>• **`Total Revenue`**: `SUM(Gross Revenue)`<br>• **`Total Profit`**: `SUM(Net Profit)`<br>• **`Purchase Frequency Bucket`**: `CASE WHEN Orders = 1 THEN '1 Order' WHEN Orders = 2 THEN '2 Orders' WHEN Orders <= 5 THEN '3-5 Orders' ELSE '6+ Orders' END`|
+| **Page 3** | **Cohort LTV & Profitability Trajectory** | • **`Month X LTV Profit`**: `SUM(Profit in Month X) / COUNT_DISTINCT(Cohort Size)`<br>• **`Retention Rate %`**: `COUNT_DISTINCT(Active Customers in Month X) / COUNT_DISTINCT(Cohort Size)`<br>• **`Avg Cumulative LTV Revenue vs. Profit`**: `SUM(Cumulative Revenue) / COUNT_DISTINCT(Cohort Size)` vs. `SUM(Cumulative Profit) / COUNT_DISTINCT(Cohort Size)`|
+| **Page 4** | **LTV Trajectory, Migration Yield & CAC Payback** | • **`12 Months LTV Revenue`**: `SUM(Revenue at Day 365) / COUNT_DISTINCT(Acquired Customers)`<br>• **`CAC Payback Point`**: `IF(Cumulative Profit LTV >= Blended CAC, 1, 0)`<br>• **`Year 1 Migration Yield`**: `SUM(Subsequent Years Repeat Profit) / SUM(Total Profit)`|
+| **Page 5** | **Purchase Velocity, Conversion & Time-Lag** | • **`Late Money Contribution`**: `SUM(Revenue After Day 90) / SUM(Lifetime Revenue)`<br>• **`Avg Days Between Orders`**: `AVG(DATE_DIFF(Next Order Date, Current Order Date, DAY))`<br>• **`AOV by Order Sequence`**: `SUM(Revenue) / COUNT(Orders)` grouped by Order Number (`Order 1`, `Order 2`, `Order 3+`)|
+| **Page 6** | **Granular Monthly Financial Ledger** | • **`Monthly Active Customers`**: `COUNT_DISTINCT(Customer ID)` per month<br>• **`Average Order Value (AOV)`**: `SUM(Total Revenue) / COUNT(Total Orders)`<br>• **`Profit Margin %`**: `SUM(Total Profit) / SUM(Total Revenue)`|
