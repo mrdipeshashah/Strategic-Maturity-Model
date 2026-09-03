@@ -122,9 +122,11 @@ Key watchouts:
 
 There are 2 data pipelines that drives the SQL views: 
 
-1) The raw transactional order table view that collates all the data (see data foundations) drives the following views: 1.1, 1.2, 1.3, 1.4, 1.5, 2.1, 2.2, 2.3, 2.4, 2.5, 5.1, 5.3   
+* **`raw transactional order table view`**
+  * **Consolidates:** `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `2.1`, `2.2`, `2.3`, `2.4`, `2.5`, `5.1`, `5.3`, 
 
-2) The raw transactional order table is core to the view_order_grain_master (single source of truth) which drives the following views: 3.1, 3.2, 3.3, 3.4, 3.5, 4.1.0, 4.1.1, 4.1.2, 4.1.3, 4.1.3b, 4.1.4, 4.1.5, 4.1.6, 4.2, 5.2, 5.3
+* **`raw transactional order table is core to the view_order_grain_master`**
+  * **Consolidates:** `3.1`, `3.2`, `3.3`, `3.4`, `3.5`, `4.1.0`, `4.1.1`, `4.1.2`, `4.1.3`, `4.1.3b`, `4.1.4`, `4.1.5`, `4.1.6`, `4.2`, `5.2`, `5.3`, 
 
 ## TESTING
 To get started I have shared two testing datasets. 
@@ -215,21 +217,21 @@ Total Lift = (New AOV × Margin × New Bridge Rate) — (Old AOV × Margin × Ol
 
 ## GOOGLE CLOUD - BIG QUERY DATA WAREHOUSE DEPLOYMENT (+ DATA STUDIO)
 
-To scale beyond spreadsheet limits, the standalone analytical models (`1.x` through `4.x`) are compiled into **3 Master BigQuery Views** under section `5.x`. This setup serves as the presentation layer for Looker Studio, supporting Executive Mobile, Executive Desktop, and Operational Deep-Dive dashboards.
+The standalone analytical models (`1.x` through `4.x`) are compiled into **3 Master BigQuery Views** under section `5.x`. This setup serves as the presentation layer for Data Studio, supporting Executive Mobile, Executive Desktop, and Operational Deep-Dive dashboards.
 
 ### Production SQL Architecture (`5.x`)
 
 * **`5.1_view_order_grain_master.sql`**
-  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_order_grain_master`
+  * **Dataset Target:** `enter.tablename.customersalesdata.view_order_grain_master`
   * **Consolidates:** `1.2`, `2.2`, `3.4`, `4.1.3`, `4.1.5`, and `4.2`
   * **Purpose:** Establishes an order-level granularity dataset. Computes chronological purchase sequences (`order_sequence`), days to second order (`days_to_next_order`), inter-purchase time gaps (`days_between_orders`), and cumulative realized customer profit. Powers both Executive Scorecard summaries and granular dashboard filters.
 
 * **`5.2_view_cohort_lifecycle_matrix.sql`**
-  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_cohort_lifecycle_matrix`
+  * **Dataset Target:** `enter.tablename.customersalesdata.view_cohort_lifecycle_matrix`
   * **Consolidates:** `2.1`, `2.3`, `2.4`, `2.5`, `3.1`, `3.2`, `4.1.0`, `4.1.1`, `4.1.2`, and `4.3`
   * **Purpose:** Pre-aggregates cumulative cohort dynamics across standard elapsed maturation buckets (`Day 000` through `Day 365+`). Powers Looker Studio cohort heatmaps, cumulative LTV expansion curves, and CAC payback tracking without client-side lag.
 
 * **`5.3_view_data_quality_audit.sql`**
-  * **Dataset Target:** `mrdipeshashah.customersalesdata.view_data_quality_audit`
+  * **Dataset Target:** `enter.tablename.customersalesdata.view_data_quality_audit`
   * **Consolidates:** `1.1`, `1.3`, `1.4`, and `1.5`
   * **Purpose:** Serves as an automated data validation monitor. Scans raw transactional ingest for null keys, future-dated records, or revenue/profit discrepancies, exposing these metrics to a hidden Admin Data Health page.
