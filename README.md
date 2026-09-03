@@ -53,7 +53,7 @@ This Google Doc provides an example of the data required, how it should be struc
 
 https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
 
-The data requirements are: 
+The data requirements to build the raw transactional order table view: 
 
 * customer_id
 * order_date
