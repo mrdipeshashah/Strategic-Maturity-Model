@@ -236,7 +236,9 @@ The standalone analytical models (`1.x` through `4.x`) are compiled into **3 Mas
   * **Consolidates:** `1.1`, `1.3`, `1.4`, and `1.5`
   * **Purpose:** Serves as an automated data validation monitor. Scans raw transactional ingest for null keys, future-dated records, or revenue/profit discrepancies, exposing these metrics to a hidden Admin Data Health page.
  
-### Data Dashboard Suite Overview
+## DATA STUDIO DASHBOARDS OVERVIEW
+
+### Dashboard Suite Overview
 
 * **1. Data Engineering Audit Dashboard:** A dedicated, single-page pipeline health monitor designed to catch data quality issues at ingestion—tracking missing customer IDs, date format errors, financial anomalies, and revenue/profit leakage gaps before data reaches reporting layer
 * **2. The Master (Pages 1–6):** The comprehensive Single Source of Truth (SSOT) reporting suite covering the full customer analytics lifecycle from executive summaries down to cohort LTV trajectories, payback velocity, conversion time-lags, and monthly financial ledgers
