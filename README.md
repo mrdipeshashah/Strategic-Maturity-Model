@@ -59,7 +59,7 @@ To show how dynamic costs are subtracted upstream before reaching the reporting 
 | **Discounts & Promo Codes** | Deduction | **-£9.00** | **£81.00** | 10% Welcome Discount code applied at checkout |
 | **Net Order Revenue** | Subtotal | **£81.00** | **£81.00** | `Gross Revenue - Discounts` (Top-line revenue exposed to view) |
 | **Product COGS** | Operational Cost | **-£25.00** | **£56.00** | Direct unit manufacturing & freight landed cost per SKU |
-| **Payment Gateway Fee** | Transaction Fee | **-£1.82** | **£54.18** | Stripe/Shopify Pay fee (~2.0% + £0.20 per transaction) |
+| **Payment Gateway Fee** | Transaction Fee | **-£1.82** | **£54.18** | Shopify Payment fee (~2.0% + £0.20 per transaction) |
 | **Pick, Pack & Shipping** | Fulfillment | **-£6.50** | **£47.68** | Warehouse picking labor + outbound courier delivery fee |
 | **Packaging & Returns Provision** | Variable Ops | **-£2.50** | **£45.18** | Branded box, unboxing materials, and blended return rate allowance |
 | **Order Net Profit** | **Final Margin** | **£45.18** | **£45.18** | **Net Contribution Margin** (Used in reporting view) |
