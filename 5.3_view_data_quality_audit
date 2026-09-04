@@ -15,7 +15,7 @@ WITH raw_metrics AS (
     -- Financial totals for reconciliation
     SUM(COALESCE(revenue, 0)) AS raw_total_revenue,
     SUM(COALESCE(profit, 0)) AS raw_total_profit
-  FROM `enter.tablename_123456.events_*`
+  FROM ‘enter.tablename.view_raw_transactional_customer_ordertable’
 ),
 
 master_metrics AS (
