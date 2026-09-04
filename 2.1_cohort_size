@@ -4,7 +4,7 @@ WITH cleaned_data AS (
     CAST(order_date AS DATE) AS order_date,
     COALESCE(revenue, 0) AS revenue,
     COALESCE(profit, 0) AS profit
-  FROM `enter.tablename_123456.events_*`
+  FROM ‘enter.tablename.view_raw_transactional_customer_ordertable’
   WHERE customer_id IS NOT NULL 
     AND order_date IS NOT NULL
 ),
