@@ -53,7 +53,7 @@ This Google Doc provides an example of the data required, how it should be struc
 
 https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
 
-The data requirements to build the **`raw transactional order table view`**
+The data requirements to build the **`view_raw_transactional_customer_ordertable`**
 
 * customer_id
 * order_date
@@ -124,7 +124,7 @@ Key watchouts:
 
 There are 2 data pipelines that drives the SQL views: 
 
-* **`raw transactional order table view`**
+* **`view_raw_transactional_customer_ordertable`**
   * **Consolidates:** `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `2.1`, `2.2`, `2.3`, `2.4`, `2.5`, `5.1`, `5.3`, 
 
 * **`raw transactional order table is core to the view_order_grain_master`**
