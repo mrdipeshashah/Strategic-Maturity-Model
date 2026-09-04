@@ -3,5 +3,5 @@ SELECT
   MIN(order_date) as first_purchase_date,
   MAX(order_date) as latest_purchase_date,
   COUNT(*) as lifetime_orders
-FROM `enter.tablename_123456.events_*`
+FROM ‘enter.tablename.view_raw_transactional_customer_ordertable’
 GROUP BY 1
