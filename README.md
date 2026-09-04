@@ -276,10 +276,13 @@ The standalone analytical models (`1.x` through `4.x`) are compiled into **3 Mas
 
 ### Dashboard Suite Overview
 
-* **1. Data Engineering Audit Dashboard:** A dedicated, single-page pipeline health monitor designed to catch data quality issues at ingestion—tracking missing customer IDs, date format errors, financial anomalies, and revenue/profit leakage gaps before data reaches reporting layer
-* **2. The Master (Pages 1–6):** The comprehensive Single Source of Truth (SSOT) reporting suite covering the full customer analytics lifecycle from executive summaries down to cohort LTV trajectories, payback velocity, conversion time-lags, and monthly financial ledgers
-* **3. The Executive One-Pager (Desktop Page 1):** A streamlined desktop dashboard giving C-suite stakeholders an immediate view of top-line scale, unit economics, and core performance trends
-* **4. The One-Pager (Mobile View):** A vertically stacked, mobile-optimized view featuring core scorecards and condensed conversion matrices for fast executive checks 
+* **1. Data Engineering Audit Dashboard:** https://datastudio.google.com/reporting/8d5e7d80-2275-41d8-accf-d9404d036c9c - **A dedicated, single-page pipeline health monitor designed to catch data quality issues at ingestion—tracking missing customer IDs, date format errors, financial anomalies, and revenue/profit leakage gaps before data reaches reporting layer**
+   
+* **2. The Master (Pages 1–6) Dashboard:** https://datastudio.google.com/reporting/ea37df0b-5b9b-46d7-95a7-f9b4a99201b0 - **The comprehensive Single Source of Truth (SSOT) reporting suite covering the full customer analytics lifecycle from executive summaries down to cohort LTV trajectories, payback velocity, conversion time-lags, and monthly financial ledgers**
+  
+* **3. The Executive One-Pager (Desktop Page 1) Dashboard:** https://datastudio.google.com/reporting/ddbf1183-e24c-4d15-95c5-3d8e8ba31092 - **A streamlined desktop dashboard giving C-suite stakeholders an immediate view of top-line scale, unit economics, and core performance trends**
+
+* **4. The One-Pager (Mobile View) Dashboard:** https://datastudio.google.com/reporting/0cbf4c5c-062f-4041-9589-e46cf7585838 - **A vertically stacked, mobile-optimized view featuring core scorecards and condensed conversion matrices for fast executive checks** 
 
 ### Data Studio Calculated Fields Reference
 
