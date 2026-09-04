@@ -3,6 +3,6 @@ SELECT
   COUNT(*) as occurrences,
   COUNT(DISTINCT customer_id) as unique_customers,
   COUNT(DISTINCT order_date) as unique_dates
-FROM `enter.tablename_123456.events_*`
+FROM ‘enter.tablename.view_raw_transactional_customer_ordertable’
 GROUP BY 1
 HAVING occurrences > 1
