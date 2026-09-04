@@ -4,7 +4,7 @@ SELECT
   COUNT(*) as frequency,
   -- SAFE_DIVIDE prevents the "Division by Zero" crash
   ROUND(SAFE_DIVIDE(profit, revenue), 2) as margin_pct
-FROM `enter.tablename_123456.events_*`
+FROM ‘enter.tablename.view_raw_transactional_customer_ordertable’
 GROUP BY 1, 2
 -- This keeps the high revenue at the top, but flags potential issues
 ORDER BY revenue DESC, margin_pct IS NULL DESC
