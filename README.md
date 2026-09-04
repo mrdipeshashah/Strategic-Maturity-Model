@@ -49,9 +49,34 @@ Surfaces core health KPIs generated from the raw transaction data:
 ## DATA FOUNDATIONS 
 The most critical step is collecting the right data and getting the right data structure. 
 
-This Google Doc provides an example of the data required, how it should be structured.
+### Example: Order-Level Profit Waterfall Analysis
 
-https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
+To show how dynamic costs are subtracted upstream before reaching the reporting view, here is a financial waterfall breakdown for a sample order selling a **Smart Jacket** for **£90.00**:
+
+| Cost Component | Type | Amount (£) | Running Balance (£) | Calculation / Sourcing |
+| :--- | :--- | :--- | :--- | :--- |
+| **Gross Retail Price (AOV)** | Revenue | **+£90.00** | **£90.00** | Initial Cart Value |
+| **Discounts & Promo Codes** | Deduction | **-£9.00** | **£81.00** | 10% Welcome Discount code applied at checkout |
+| **Net Order Revenue** | Subtotal | **£81.00** | **£81.00** | `Gross Revenue - Discounts` (Top-line revenue exposed to view) |
+| **Product COGS** | Operational Cost | **-£25.00** | **£56.00** | Direct unit manufacturing & freight landed cost per SKU |
+| **Payment Gateway Fee** | Transaction Fee | **-£1.82** | **£54.18** | Stripe/Shopify Pay fee (~2.0% + £0.20 per transaction) |
+| **Pick, Pack & Shipping** | Fulfillment | **-£6.50** | **£47.68** | Warehouse picking labor + outbound courier delivery fee |
+| **Packaging & Returns Provision** | Variable Ops | **-£2.50** | **£45.18** | Branded box, unboxing materials, and blended return rate allowance |
+| **Order Net Profit** | **Final Margin** | **£45.18** | **£45.18** | **Net Contribution Margin** (Used in reporting view) |
+
+### Data Lineage & Upstream Profit Modeling
+
+While `view_order_grain_master` exposes a clean `profit` column (e.g., the £45.18 calculated above) for LTV cohort modeling, calculating order-level net margin is highly business-specific and computed upstream
+
+#### **Upstream Staging Pipeline**
+1. **Raw Order & Line Item Extraction:** Normalizes raw cart transactions, line items, and fulfillment events.
+2. **Dynamic COGS & Fulfillment Attribution:** Joins SKU-level product costs, picking/packing expenses, and variable shipping fees.
+3. **Gateway & Discount Reconciliation:** Subtracts payment processor fees (e.g., Stripe/Shopify Pay), merchant fees, and distributed discount codes.
+4. **Final Order-Level Grain:** Aggregates order-level gross revenue and net profit before handing off to `view_order_grain_master`.
+
+> **Note:** The cohort models, LTV trajectories, and CAC payback calculations in this repository assume `profit` represents true order contribution margin ($\text{Net Sales Revenue} - \text{COGS} - \text{Variable Operational Costs}$).
+
+### Data Requirements
 
 The data requirements to build the **`view_raw_transactional_customer_ordertable`**
 
@@ -59,6 +84,10 @@ The data requirements to build the **`view_raw_transactional_customer_ordertable
 * order_date
 * revenue
 * profit
+
+This Google Doc provides an example of the data required, how it should be structured. 
+
+https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
 
 Key watchouts: 
 
@@ -68,6 +97,8 @@ Key watchouts:
 * Consistency of customer_id its always lowercase or uppercase and not mixed
 * Ensure there’s no trailing space
 * No duplicate records
+
+In most cases the data will be available in Big Query which is where all the raw dats and calculations will be made getting to **`view_raw_transactional_customer_ordertable`**
 
 ## THE BUSINESS QUESTIONS THAT CAN BE ASKED 
 
@@ -127,8 +158,10 @@ There are 2 data pipelines that drives the SQL views:
 * **`view_raw_transactional_customer_ordertable`**
   * **Consolidates:** `1.1`, `1.2`, `1.3`, `1.4`, `1.5`, `2.1`, `2.2`, `2.3`, `2.4`, `2.5`, `5.1`, `5.3`, 
 
-* **`raw transactional order table is core to the view_order_grain_master`**
-  * **Consolidates:** `3.1`, `3.2`, `3.3`, `3.4`, `3.5`, `4.1.0`, `4.1.1`, `4.1.2`, `4.1.3`, `4.1.3b`, `4.1.4`, `4.1.5`, `4.1.6`, `4.2`, `5.2`, `5.3`, 
+* raw transactional order table is core to **`view_order_grain_master`**
+  * **Consolidates:** `3.1`, `3.2`, `3.3`, `3.4`, `3.5`, `4.1.0`, `4.1.1`, `4.1.2`, `4.1.3`, `4.1.3b`, `4.1.4`, `4.1.5`, `4.1.6`, `4.2`, `5.2`, `5.3`,
+ 
+**`view_raw_transactional_customer_ordertable`** feeds **`view_order_grain_master`**
 
 ## TESTING
 To get started I have shared two testing datasets. 
