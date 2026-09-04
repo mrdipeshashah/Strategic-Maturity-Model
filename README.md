@@ -85,10 +85,6 @@ The data requirements to build the **`view_raw_transactional_customer_ordertable
 * revenue
 * profit
 
-This Google Doc provides an example of the data required, how it should be structured. 
-
-https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
-
 Key watchouts: 
 
 * The order_date is always YYYY-MM-DD i.e., 2026-06-13
@@ -98,7 +94,12 @@ Key watchouts:
 * Ensure there’s no trailing space
 * No duplicate records
 
-In most cases the data will be available in Big Query which is where all the raw dats and calculations will be made getting to **`view_raw_transactional_customer_ordertable`**
+* **Storage Agnostic:** Whether plugged directly into BigQuery or a Google Sheet, missing these checks causes broken joins, silent aggregation errors, or distorted LTV curves.
+* **Format Enforcement:** Google Sheets is particularly prone to text-formatted numbers and trailing spaces in string IDs, whereas BigQuery enforces data types strictly at the schema level.
+
+This Google Doc provides an example of the data required, how it should be structured. 
+
+https://docs.google.com/spreadsheets/d/1BIXYFb17sxFHbq_a42uQxtVTX84_Hj-Ee0zOm_t2ArA/edit?usp=sharing
 
 ## THE BUSINESS QUESTIONS THAT CAN BE ASKED 
 
