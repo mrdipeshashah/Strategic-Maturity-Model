@@ -19,12 +19,15 @@ first_second_gaps AS (
 
 SELECT
   CASE
-    WHEN days_to_second_order <= 30 THEN '01. 0-30 Days'
-    WHEN days_to_second_order <= 60 THEN '02. 31-60 Days'
-    WHEN days_to_second_order <= 90 THEN '03. 61-90 Days'
-    WHEN days_to_second_order <= 180 THEN '04. 91-180 Days'
-    WHEN days_to_second_order <= 365 THEN '05. 181-365 Days'
-    ELSE '06. 365+ Days'
+    WHEN days_to_second_order <= 15 THEN '01. 0–15 Days'
+    WHEN days_to_second_order <= 30 THEN '02. 16–30 Days'
+    WHEN days_to_second_order <= 45 THEN '03. 31–45 Days'
+    WHEN days_to_second_order <= 60 THEN '04. 46–60 Days'
+    WHEN days_to_second_order <= 75 THEN '06. 61–75 Days'
+    WHEN days_to_second_order <= 90 THEN '07. 76–90 Days'
+    WHEN days_to_second_order <= 180 THEN '08. 91-180 Days'
+    WHEN days_to_second_order <= 365 THEN '09. 181-365 Days'
+    ELSE '10. 365+ Days'
   END AS repurchase_window_bucket,
   COUNT(customer_id) AS total_customers,
   ROUND(AVG(days_to_second_order), 1) AS avg_days_in_bucket
