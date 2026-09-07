@@ -1,14 +1,16 @@
 # STRATEGIC MATURITY MODEL
 
 ## OVERVIEW
-Focusing on DTC/E-commerce business generating up to £10m in revenue I have developed a process using the Google Ecoysystem to better understand LTV which is supported by a robust set of metrics. It takes DTC/E-commerce brands from raw data to **Strategic Maturity**. 
+Designed for DTC and transactional e-commerce businesses generating up to **£10M in annual revenue**, this analytics framework leverages the Google Ecosystem (BigQuery + Data Studio) to accurately evaluate LTV, margin contribution, and customer repeat behavior. 
 
-### Strategic Outcomes:
-* Moving away from metrics such as ROAS + Traffic to LTV and Bridge (2nd order) efficiency.
-* Identifying when the exact no of days when a customer becomes profitable 
-* Understanding the conversion rate from 1st purchase to 2nd purchase
-* Identifying one time customers v loyal customers
-* Using historic cohort data to predict next years revenue 
+It takes brands from raw, unsegmented transaction data to true **Strategic Maturity** by eliminating the mathematical distortions of top-line arithmetic means.
+
+### Strategic Outcomes
+* **Metric Paradigm Shift:** Moves core focus away from vanity metrics (ROAS & traffic volume) to order-level Contribution Margin (CM2) and 2nd-order conversion efficiency.
+* **Exact Profit Payback Timing:** Identifies the precise time window (in 15-day distribution buckets) when a customer cohort pays back acquisition costs and becomes contribution-margin positive.
+* **Order 1-to-2 Conversion Precision:** Maps exact time-lag waves (`15–30`, `31–45`, `46–60` days) to ground automated CRM flows in actual buyer behavior rather than skewed global averages.
+* **One-Time vs. Repeat Segment Isolation:** Distinguishes high-value multi-order buyers from single-order drop-offs without subscription (SnS) noise.
+* **Cohort-Driven Revenue Forecasting:** Uses historical order-grain cohort performance to project future repeat revenue and customer lifetime value.
 
 ## THE FRAMEWORK
 The repository is organized into four distinct modules:
