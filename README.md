@@ -12,6 +12,13 @@ It takes brands from raw, unsegmented transaction data to true **Strategic Matur
 * **One-Time vs. Repeat Segment Isolation:** Distinguishes high-value multi-order buyers from single-order drop-offs without subscription (SnS) noise.
 * **Cohort-Driven Revenue Forecasting:** Uses historical order-grain cohort performance to project future repeat revenue and customer lifetime value.
 
+### Strategic Questions Answered
+* **Gross Margin Velocity:** How many days does it take for a customer cohort to generate enough Contribution Margin (CM1) to clear its initial acquisition threshold?
+* **Lifecycle Purchase Timing:** Within each 15-day distribution window (`16–30`, `31–45`, `46–60`), at what specific peak day intervals (Day 23, Day 38, Day 53) do customer cohorts naturally re-order without relying on paid retargeting?
+* **Net Unit Profitability:** What is the true, fully loaded order-level margin (CM2) after deducting landed COGS, merchant gateway fees, and pick-and-pack fulfillment costs?
+* **Cohort Margin Retention:** What percentage of acquired first-time buyers convert into multi-order repeat customers versus dropping off after Order 1?
+* **Repeat Revenue Trajectory:** Based on historical time-lag velocity, how much contribution margin will current active customer cohorts generate over the next 30, 60, 90, and 365 days?
+
 ## THE FRAMEWORK
 The repository is organized into four distinct modules:
 
