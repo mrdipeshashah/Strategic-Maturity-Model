@@ -283,7 +283,7 @@ The standalone analytical models (`1.x` through `4.x`) are compiled into **3 Mas
  
 ## DATA STUDIO DASHBOARDS OVERVIEW
 
-### Dashboard Suite Overview
+### Dashboard Suite Overview > https://dipeshshah.com/strategic-maturity-model/
 
 * **1. Data Engineering Audit Dashboard:** https://datastudio.google.com/reporting/8d5e7d80-2275-41d8-accf-d9404d036c9c - **A dedicated, single-page pipeline health monitor designed to catch data quality issues at ingestion—tracking missing customer IDs, date format errors, financial anomalies, and revenue/profit leakage gaps before data reaches reporting layer**
    
